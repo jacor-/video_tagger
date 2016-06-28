@@ -1,35 +1,6 @@
 name: "GoogleNet"
 
-layer {
-  type: "Python"
-  name: "data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  python_param {
-    module: 'multilabel_datalayer'
-    layer: 'VilynxDatabaseAsync'
-    param_str: '{"N_labels": OUTPUT_NEURONS, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "TRAIN_FILENAME", "split": "TRAIN"}'
-  }
-}
-
-layer {
-  type: "Python"
-  name: "data"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  python_param {
-    module: 'multilabel_datalayer'
-    layer: 'VilynxDatabaseAsync'
-    param_str: '{"N_labels": OUTPUT_NEURONS, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "VAL_FILENAME", "split": "TEST"}'
-  }
-}
-
+<<template_inputprototxt>>
 
 layer {
   name: "conv1/7x7_s2"
@@ -914,14 +885,8 @@ layer {
     }
   }
 }
-layer {
-  name: "loss1/loss"
-  type: "SigmoidCrossEntropyLoss"
-  bottom: "loss1/classifier"
-  bottom: "label"
-  top: "loss1/loss1"
-  loss_weight: 0.2
-}
+<<template_crossentropylossintermediate_name:loss1/loss_bottomlayer:loss1/classifier_lossweight:0.2>>
+
 layer {
   name: "inception_4b/1x1"
   type: "Convolution"
@@ -1654,14 +1619,10 @@ layer {
     }
   }
 }
-layer {
-  name: "loss2/loss"
-  type: "SigmoidCrossEntropyLoss"
-  bottom: "loss2/classifier"
-  bottom: "label"
-  top: "loss2/loss2"
-  loss_weight: 0.2
-}
+
+
+<<template_crossentropylossintermediate_name:loss2/loss_bottomlayer:loss2/classifier_lossweight:0.2>>
+
 layer {
   name: "inception_4e/1x1"
   type: "Convolution"
@@ -2362,44 +2323,6 @@ layer {
     layer: 'MultilabelToMonolabelAttentionLayer'
   }
 }
-layer {
-  name: "loss3/loss"
-  type: "SoftmaxWithLoss"
-  bottom: "loss3/classifier"
-  bottom: "labelmodifier"
-  propagate_down: true
-  propagate_down: false
-  top: "loss3/loss3"
-  loss_weight: 1
-}
-layer {
-  type: "Python"
-  name: "loss_test/loss"
-  bottom: "probs_out"
-  bottom: "label"
-  top: "loss_test/loss"
-  python_param {
-    module: 'multilabel_to_monolabel_attention_layer'
-    layer: 'MonolabelAccuracyOneCorrectAfterSoftmax'
-  }
-  include {
-    phase: TEST
-  }
-}
-layer {
-  type: "Python"
-  name: "loss_test-top-5/loss"
-  bottom: "probs_out"
-  bottom: "label"
-  top: "loss_test-top-5/loss"
-  python_param {
-    module: 'multilabel_to_monolabel_attention_layer'
-    layer: 'MonolabelAccuracyOneCorrectAfterSoftmax_top5'
-  }
-  include {
-    phase: TEST
-  }
-}
 
 
-
+<<template_evaltrainstage_bottomlayer:loss3/classifier_outprobs:probs_out>>
