@@ -1,0 +1,30 @@
+layer {
+  type: "Python"
+  name: "data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  python_param {
+    module: 'multilabel_datalayer'
+    layer: 'VilynxDatabaseAsync'
+    param_str: '{"N_labels": OUTPUT_NEURONS, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "TRAIN_FILENAME", "split": "TRAIN"}'
+  }
+}
+
+layer {
+  type: "Python"
+  name: "data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  python_param {
+    module: 'multilabel_datalayer'
+    layer: 'VilynxDatabaseAsync'
+    param_str: '{"N_labels": OUTPUT_NEURONS, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "VAL_FILENAME", "split": "TEST"}'
+  }
+}
+

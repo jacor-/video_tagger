@@ -1,0 +1,14 @@
+
+
+
+SigmoidCrossEntropyLoss
+
+
+layer {
+  name: "loss"
+  type: SigmoidCrossEntropyLoss
+  bottom: "soft1"
+  bottom: "label"
+  top: "loss"
+}
+

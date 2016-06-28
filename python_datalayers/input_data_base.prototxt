@@ -1,0 +1,19 @@
+layer {
+  type: 'Python'
+  name: 'loss'
+  top: 'loss'
+  bottom: 'ipx'
+  bottom: 'ipy'
+  python_param {
+    # the module name -- usually the filename -- that needs to be in $PYTHONPATH
+    module: 'multilabel_datalayer.py'
+    # the layer name -- the class name in the module
+    layer: 'VilynxDatabaseAsync'
+    N_labels: OUTPUT_NEURONS
+    batch_size : 125
+    im_shape : (224,224)
+    data_filename : {DATA_FILENAME}
+    split: TEST
+  }
+}
+
