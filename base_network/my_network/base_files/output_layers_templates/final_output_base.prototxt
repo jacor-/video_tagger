@@ -2,7 +2,7 @@
 layer {
   name: "loss3/loss"
   type: "SoftmaxWithLoss"
-  bottom: "<<bottomlayer>>"
+  bottom: "<<var_bottomlayer>>"
   bottom: "labelmodifier"
   propagate_down: true
   propagate_down: false
@@ -12,7 +12,7 @@ layer {
 layer {
   type: "Python"
   name: "loss_test/loss"
-  bottom: "<<outprobs>>"
+  bottom: "<<var_outprobs>>"
   bottom: "label"
   top: "loss_test/loss"
   python_param {
@@ -26,7 +26,7 @@ layer {
 layer {
   type: "Python"
   name: "loss_test-top-5/loss"
-  bottom: "<<outprobs>>"
+  bottom: "<<var_outprobs>>"
   bottom: "label"
   top: "loss_test-top-5/loss"
   python_param {

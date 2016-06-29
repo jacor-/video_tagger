@@ -1,8 +1,8 @@
 layer {
-  name: "<<name>>"
+  name: "<<var_name>>"
   type: "SigmoidCrossEntropyLoss"
-  bottom: "<<bottomlayer>>"
+  bottom: "<<var_bottomlayer>>"
   bottom: "label"
   top: "loss1/loss1"
-  loss_weight: <<loss_weight>>
+  loss_weight: <<var_lossweight>>
 }
