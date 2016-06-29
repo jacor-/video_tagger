@@ -4,7 +4,7 @@
 ###
 import pandas as pd
 
-class PrototxtCosetes(object):
+class PrototxtTemplate(object):
     def __init__(self, prototxt_main_file, map_template2file):
         self.template = ''.join(open(prototxt_main_file, 'r').readlines())
         inds_to_be_replaced = self.locate_replaceable_fields(self.template)
@@ -19,7 +19,7 @@ class PrototxtCosetes(object):
                     for i in range(2,len(v)):
                         args[v[i].split(":")[0]] = v[i].split(":")[1]
 
-                temp = PrototxtCosetes(map_template2file[template_name], {})
+                temp = PrototxtTemplate(map_template2file[template_name], {})
                 val = temp.getString(args)
                 replaceable.append(['<<'+self.template[ini:end]+'>>', val])
                 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         'crossentropylossintermediate' :    './base_network/my_network/base_files/output_layers_templates/crossentropylossintermediate.prototxt'
     }
 
-    new_prototxt = PrototxtCosetes("./base_network/my_network/base_files/googlenetbase.prototxt", map_template2file)
+    new_prototxt = PrototxtTemplate("./base_network/my_network/base_files/googlenetbase.prototxt", map_template2file)
     new_prototxt.saveOutputPrototxt(OUTPUT_FILENAME, variables_to_replace)
 
 
