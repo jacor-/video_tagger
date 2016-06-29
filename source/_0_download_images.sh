@@ -17,10 +17,10 @@
 
 #Retry X times the images which has not been downloaded properly
 ntries=10
-for i in $(seq 1 $ntries);
+for i in $(seq 1 $ntries); do
     echo $ntries
-	for IM_NAME in in $(ls -lah data/images/ | grep ' 0 ' | cut -d ' ' -f12); do
-   		echo $IM_NAME;
+    for IM_NAME in in $(ls -lah data/images/ | grep ' 0 ' | cut -d ' ' -f12 | cut -d '.' -f1); do
+        echo $IM_NAME;
         wget https://public.vilynx.com/$IM_NAME/pro69.viwindow.jpg -O data/images/$IM_NAME.jpg 2> /dev/null > /dev/null;
     done;
 done;
