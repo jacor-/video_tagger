@@ -10,6 +10,9 @@ input_file_train = 'data/files/train.txt'
 output_file_train = 'data/files/filtered_train.txt'
 input_file_test = 'data/files/val.txt'
 output_file_test = 'data/files/filtered_val.txt'
+
+#os.system("for filename in $(ls -lah data/images/ | grep ' 0 ' | cut -d ' ' -f12); do rm data/images/$filename; done;")
+
 available_images = os.listdir('data/images')
 
 

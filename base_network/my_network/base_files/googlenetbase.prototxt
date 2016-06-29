@@ -862,10 +862,10 @@ layer {
   }
 }
 layer {
-  name: "loss1/classifier"
+  name: "loss1/classifier_new"
   type: "InnerProduct"
   bottom: "loss1/fc"
-  top: "loss1/classifier"
+  top: "loss1/classifier_new"
   param {
     lr_mult: <<var_LRMULTLASTLAYER>>
     decay_mult: <<var_DEMULTLASTLAYER>>
@@ -885,7 +885,7 @@ layer {
     }
   }
 }
-<<template_crossentropylossintermediate_name:loss1/loss_bottomlayer:loss1/classifier_lossweight:0.2>>
+<<template_crossentropylossintermediate_name:loss1/loss_bottomlayer:loss1/classifier_new_lossweight:0.2>>
 
 layer {
   name: "inception_4b/1x1"
