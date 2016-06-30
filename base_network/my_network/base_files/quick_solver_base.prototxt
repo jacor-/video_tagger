@@ -1,9 +1,9 @@
 
 net: "<<var#MODELTOTRAIN>>"
-test_iter: 4
-test_interval: 100
+test_iter: 5
+test_interval: 250
 test_initialization: false
-display: 10
+display: 100
 average_loss: 1
 base_lr: 0.01
 lr_policy: "poly"

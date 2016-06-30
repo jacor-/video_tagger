@@ -70,7 +70,7 @@ new_prototxt = PrototxtTemplate(PROTOTXT_BASE, map_template2file)
 new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
 variables_to_replace = {
-    'ITERS' : '10',
+    'ITERS' : '2000',
     'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/snapshot_stage_1',
     'MODELTOTRAIN': PROTOTXT_READY
 }
@@ -85,8 +85,8 @@ os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} 
 #########################################################
 ###------------------ 2st stage ----------------------###
 #########################################################
-snapshot_prefix_looked_for = 'snapshot_stage_2'
-last_snapshot=sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
+snapshot_prefix_looked_for = 'snapshot_stage_1'
+last_snapshot='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
 
 variables_to_replace = {
     'LRMULTBASENET' : '1',
@@ -108,7 +108,7 @@ new_prototxt = PrototxtTemplate(PROTOTXT_BASE, map_template2file)
 new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
 variables_to_replace = {
-    'ITERS' : '10',
+    'ITERS' : '5000',
     'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/snapshot_stage_2',
     'MODELTOTRAIN': PROTOTXT_READY
 }
@@ -116,6 +116,6 @@ variables_to_replace = {
 new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
 new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
-os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage_2.error > ./data/logs/train_stage_2.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = INITIAL_WEIGHTS))
+os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage_2.error > ./data/logs/train_stage_2.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot))
 
 
