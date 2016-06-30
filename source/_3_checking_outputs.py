@@ -49,17 +49,34 @@ new_prototxt.saveOutputPrototxt(prototxt_ready, variables_to_replace)
 
 
 
+
+def loadData(imagename, st)
+    ims = np.asarray(Image.open(imagename)) # load image
+    ims = scipy.misc.imresize(im, imshape) # resize
+    ims = st.preprocess(im)
+    return ims
+
+def getOutputData(net, image):
+    net.blobs['data'].data[...] = im.reshape([1, im.shape[0], im.shape[1], im.shape[2]])
+    out = net.forward()
+    return out['probsout']
+
+
+
+def initNetwork(prototxt, model_file):
+    net = caffe.Net(prototxt, model_file, caffe.TEST)
+    net.blobs['data'].reshape(1,3,imshape[0],imshape[1])
+    return net
+
+
 st = SimpleTransformer()
 
-net = caffe.Net(prototxt_ready, model_file, caffe.TEST)
-net.blobs['data'].reshape(1,3,imshape[0],imshape[1])
+## Load networks (all those networks you will need)
+net = initNetwork(prototxt_ready, model_file)
 
-im = np.asarray(Image.open(dataset[0][0])) # load image
-im = scipy.misc.imresize(im, imshape) # resize
-im = st.preprocess(im)
-
-net.blobs['data'].data[...] = im.reshape([1, im.shape[0], im.shape[1], im.shape[2]])
-out = net.forward()
-print(out['probsout'])
-
-
+## Load images and predict. It does not accept batches atm. It will, though
+outputs = []
+for i in range(10):
+    im = loadData(dataset[0][i], st)
+    out = getOutputData(net, im)
+    outputs.append(out)
