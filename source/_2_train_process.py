@@ -41,9 +41,8 @@ TRAIN_FILENAME="./data/files/filtered_train.txt";
 
 
 # We check how many classes there are in the output. Please, be sure when you build the dataset that the classes are numbered from 0 to (OUTPUT_CLASSES - 1)
-command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l", shell = True).format(train_filename = TRAIN_FILENAME)
-print(command)
-OUTPUT_CLASSES= int(subprocess.check_output(command))
+command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
+OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))
 os.system('mkdir -p ./data/base_network/my_network/ready_files')
 
 #########################################################
