@@ -22,6 +22,9 @@ model_file='/home/ubuntu/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
 data_filename = "data/files/filtered_val.txt"
 dataset = [line.rstrip('\n').split(",") for line in open(data_filename)]
 
+
+TRAIN_FILENAME="./data/files/filtered_train.txt";
+command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
 OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))
 
 
