@@ -52,8 +52,8 @@ new_prototxt.saveOutputPrototxt(prototxt_ready, variables_to_replace)
 
 def loadData(imagename, st):
     ims = np.asarray(Image.open(imagename)) # load image
-    ims = scipy.misc.imresize(im, imshape) # resize
-    ims = st.preprocess(im)
+    ims = scipy.misc.imresize(ims, imshape) # resize
+    ims = st.preprocess(ims)
     return ims
 
 def getOutputData(net, image):
