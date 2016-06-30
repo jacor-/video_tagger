@@ -15,9 +15,10 @@ import sys
 imshape = (224,224)
 prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
 prototxt_ready='./data/base_network/my_network/ready_files/ready_network_deploy.prototxt'
-#snapshot_prefix_looked_for = 'snapshot_stage_1'
-#model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
-model_file='/home/ubuntu/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
+
+snapshot_prefix_looked_for = 'snapshot_stage_1'
+model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
+#model_file='/home/ubuntu/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
 
 data_filename = "data/files/filtered_val.txt"
 dataset = [line.rstrip('\n').split(",") for line in open(data_filename)]
@@ -86,3 +87,4 @@ for i in range(10):
     labs.append(labels)
 
 outputs = np.array(outputs)
+chosen_labels = np.argmax(outputs, axis=2)
