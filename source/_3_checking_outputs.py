@@ -81,7 +81,7 @@ labs = []
 for i in range(10):
     im = loadData(dataset[i][0], st)
     out = getOutputData(net, im)
-    outputs.append(out.copy())
+    outputs.append(np.array(out))
 
     labels = map(int, list(set(dataset[i][1].split(" "))))
     labs.append(labels)
