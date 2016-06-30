@@ -33,7 +33,7 @@ SOLVER_BASE='./base_network/my_network/base_files/quick_solver_base.prototxt'
 SNAPSHOT_PREFIX='./data/snapshots'
 
 #Path to the folder where we can wait the initial weights in case we want to use some
-INITIAL_WEIGHTS='./data/base_network/original/bvlc_googlenet.caffemodel'
+INITIAL_WEIGHTS='/home/ubuntu/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
 
 #Path to the validation and train filenames
 VAL_FILENAME="./data/files/filtered_val.txt";
