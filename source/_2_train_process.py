@@ -75,7 +75,7 @@ variables_to_replace = {
 new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
 new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
-system.os('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage.error > ./data/logs/train_stage.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot))
+os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage.error > ./data/logs/train_stage.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot))
 
 
 
@@ -112,6 +112,6 @@ variables_to_replace = {
 new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
 new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
-system.os('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage_2.error > ./data/logs/train_stage_2.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = INITIAL_WEIGHTS))
+os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage_2.error > ./data/logs/train_stage_2.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = INITIAL_WEIGHTS))
 
 
