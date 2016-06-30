@@ -30,3 +30,4 @@ for filename in $(ls -lah data/images/ | grep ' 0 ' | cut -d ' ' -f12); do rm da
 
 
 
+
