@@ -9,7 +9,7 @@ layer {
   python_param {
     module: 'multilabel_datalayer'
     layer: 'VilynxDatabaseAsync'
-    param_str: '{"N_labels": <<var_OUTPUTNEURONS>>, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "<<var#TRAINFILENAME>>", "split": "TRAIN"}'
+    param_str: '{"N_labels": <<var#OUTPUTNEURONS>>, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "<<var#TRAINFILENAME>>", "split": "TRAIN"}'
   }
 }
 
@@ -24,7 +24,7 @@ layer {
   python_param {
     module: 'multilabel_datalayer'
     layer: 'VilynxDatabaseAsync'
-    param_str: '{"N_labels": <<var_OUTPUTNEURONS>>, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "<<var#VALFILENAME>>", "split": "TEST"}'
+    param_str: '{"N_labels": <<var#OUTPUTNEURONS>>, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "<<var#VALFILENAME>>", "split": "TEST"}'
   }
 }
 
