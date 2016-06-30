@@ -1,5 +1,5 @@
 
-net: "<<var_MODELTOTRAIN>>"
+net: "<<var#MODELTOTRAIN>>"
 test_iter: 4
 test_interval: 100
 test_initialization: false
@@ -8,9 +8,9 @@ average_loss: 1
 base_lr: 0.01
 lr_policy: "poly"
 power: 0.5
-max_iter: <<var_ITERS>>
+max_iter: <<var#ITERS>>
 momentum: 0.9
 weight_decay: 0.0002
 snapshot: 2500
-snapshot_prefix: "<<var_SNAPSHOTPREFIX>>"
+snapshot_prefix: "<<var#SNAPSHOTPREFIX>>"
 solver_mode: CPU
