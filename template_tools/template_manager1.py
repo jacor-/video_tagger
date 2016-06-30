@@ -10,7 +10,7 @@ class PrototxtTemplate(object):
         inds_to_be_replaced = self.locate_replaceable_fields(self.template)
         replaceable = []
         for ini, end in inds_to_be_replaced:
-            v = self.template[ini:end].split("_")
+            v = self.template[ini:end].split("#")
             if v[0] == 'template':
                 template_name = v[1]
                 args = {}
@@ -52,7 +52,7 @@ class PrototxtTemplate(object):
     def getString(self, fields_to_replace):
         aux = str(self.template)
         for string_to_replace in fields_to_replace:
-            aux = aux.replace('<<var_'+string_to_replace+'>>', fields_to_replace[string_to_replace])
+            aux = aux.replace('<<var#'+string_to_replace+'>>', fields_to_replace[string_to_replace])
         return aux
 
     def saveOutputPrototxt(self, out_filename, fields_to_replace):
