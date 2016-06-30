@@ -1,11 +1,10 @@
 
-layer {
-  type: "input"
+  input: "data"
   input_shape: {
      dim:1
      dim:3
      dim:224
      dim:224
   }
-}
+
 
