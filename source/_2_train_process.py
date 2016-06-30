@@ -18,7 +18,7 @@ import subprocess
 import os
 import sys
 
-sys.path = sys.path + [subprocess.check_output('cmd') + '/python_datalayers']
+sys.path = sys.path + [subprocess.check_output('pwd', shell = True) + '/python_datalayers']
 
 print(sys.path)
 
