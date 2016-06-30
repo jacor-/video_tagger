@@ -82,5 +82,7 @@ for i in range(10):
     out = getOutputData(net, im)
     outputs.append(out)
 
-    labels = list(set(dataset[i][1].split(" ")))
+    labels = map(int, list(set(dataset[i][1].split(" "))))
     labs.append(labels)
+
+outputs = np.array(outputs)
