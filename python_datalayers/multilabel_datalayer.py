@@ -117,7 +117,7 @@ class VilynxDatabaseAsync(caffe.Layer):
         # === Read input parameters ===
 
         # params is a python dictionary with layer parameters.
-        print(self.param_str)
+        #print(self.param_str)
         params = eval(self.param_str)
 
         # do some simple checks that we have the parameters we need.
@@ -156,7 +156,9 @@ class VilynxDatabaseAsync(caffe.Layer):
 
         for top_index, name in zip(range(len(top)), self.top_names):
             for i in range(self.batch_size):
-                top[top_index].data[i, ...] = self.thread_result[name][i] #Copy the already-prepared data to caffe.
+                aux = self.thread_result
+                #print(name)
+                top[top_index].data[i, ...] = aux[name][i] #Copy the already-prepared data to caffe.
 
         self.dispatch_worker() # let's go again while the GPU process this batch.
 
@@ -214,9 +216,10 @@ class BatchAdvancer():
 
 
             #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
+            #print('Loading image ' + str(index[0]))
             im = np.asarray(Image.open(index[0])) # load image
             im = scipy.misc.imresize(im, self.im_shape) # resize
-
+            #print('oaded image ' + str(index[0]))
             # do a simple horizontal flip as data augmentation
             flip = np.random.choice(2)*2-1
             im = im[:, ::flip, :]
