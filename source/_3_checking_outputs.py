@@ -76,7 +76,11 @@ net = initNetwork(prototxt_ready, model_file)
 
 ## Load images and predict. It does not accept batches atm. It will, though
 outputs = []
+labs = []
 for i in range(10):
-    im = loadData(dataset[0][i], st)
+    im = loadData(dataset[i][0], st)
     out = getOutputData(net, im)
     outputs.append(out)
+
+    labels = list(set(dataset[i][1].split(" ")))
+    labs.append(labels)
