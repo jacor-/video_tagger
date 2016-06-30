@@ -25,7 +25,7 @@ SOLVER_READY='./data/base_network/my_network/ready_files/ready_solver.prototx'
 
 #Paths where we can find the original files
 PROTOTXT_BASE='./base_network/my_network/base_files/googlenetbase.prototxt'
-SOLVER_BASE='.PATH_HERE/base_network/my_network/base_files/quick_solver_base.prototxt'
+SOLVER_BASE='./base_network/my_network/base_files/quick_solver_base.prototxt'
 
 #Path where we will save the snapshots which are going to be produced when training the network
 SNAPSHOT_PREFIX='./data/snapshots'
