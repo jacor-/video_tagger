@@ -78,7 +78,8 @@ net = initNetwork(prototxt_ready, model_file)
 ## Load images and predict. It does not accept batches atm. It will, though
 outputs = []
 labs = []
-for i in range(10):
+count = 0
+for i in range(200):
     im = loadData(dataset[i][0], st)
     out = getOutputData(net, im)
     outputs.append(np.array(out))
@@ -86,5 +87,10 @@ for i in range(10):
     labels = map(int, list(set(dataset[i][1].split(" "))))
     labs.append(labels)
 
+    if np.argmax(out) in labels:
+        count += 1
+
 outputs = np.array(outputs)
 chosen_labels = np.argmax(outputs, axis=2)
+
+print(count)
