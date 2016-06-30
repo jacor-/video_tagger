@@ -78,14 +78,15 @@ variables_to_replace = {
 new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
 new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
-os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage.error > ./data/logs/train_stage.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot))
+os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage_1.error > ./data/logs/train_stage_1.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot))
 
 
 
 #########################################################
 ###------------------ 2st stage ----------------------###
 #########################################################
-last_snapshot=subprocess.check_output('cat data/logs/train_stage.error | grep "Snapshotting to binary proto file" | tail -n 1 | cut -d " " -f10', shell = True)
+snapshot_prefix_looked_for = 'snapshot_stage_2'
+last_snapshot=sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
 
 variables_to_replace = {
     'LRMULTBASENET' : '1',
