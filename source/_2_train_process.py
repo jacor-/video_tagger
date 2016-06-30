@@ -42,48 +42,76 @@ TRAIN_FILENAME="./data/files/filtered_train.txt";
 OUTPUT_CLASSES= int(subprocess.check_output("cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l", shell = True).format(train_filename = TRAIN_FILENAME))
 os.system('mkdir -p ./data/base_network/my_network/ready_files')
 
-######################################################
-# 1st run
-LR_MULT_LAST_LAYER=1;
-DE_MULT_LAST_LAYER=2;
-LR_MULT_BASE_NET=0;
-DE_MULT_BASE_NET=0;
-ITERS=2500;
+#########################################################
+###------------------ 1st stage ----------------------###
+#########################################################
+last_snapshot = INITIAL_WEIGHTS
 
-OUTPUT_AUX=$(cat $PROTOTXT_BASE | sed "s|loss1/classifier|loss1/classifier_new|g"  | sed "s|loss2/classifier|loss2/classifier_new|g"  | 
-	sed "s|loss3/classifier|loss3/classifier_new|g" | sed "s|OUTPUT_NEURONS|$OUTPUT_CLASSES|g")
-OUTPUT_AUX=$(echo $OUTPUT_AUX | sed "s|LR_MULT_BASE_NET|$LR_MULT_BASE_NET|g" | sed "s|DE_MULT_BASE_NET|$DE_MULT_BASE_NET|g" | 
-								sed "s|LR_MULT_LAST_LAYER|$LR_MULT_LAST_LAYER|g" | sed "s|DE_MULT_LAST_LAYER|$DE_MULT_LAST_LAYER|g")
-OUTPUT_AUX=$(echo $OUTPUT_AUX | sed "s|VAL_FILENAME|$VAL_FILENAME|g"  | sed "s|TRAIN_FILENAME|$TRAIN_FILENAME|g")
+variables_to_replace = {
+    'LRMULTBASENET' : '0',
+    'DEMULTBASENET' : '0',
+    'LRMULTLASTLAYER' : '1',
+    'DEMULTLASTLAYER' : '2',
+    'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
+    'TRAINFILENAME': TRAIN_FILENAME,
+    'VALFILENAME': VAL_FILENAME
+}
 
+map_template2file = {
+    'inputprototxt' :                   './base_network/my_network/base_files/input_layers_base/train_layers_base.prototxt',
+    'evaltrainstage' :                  './base_network/my_network/base_files/output_layers_templates/final_output_base.prototxt',
+    'crossentropylossintermediate' :    './base_network/my_network/base_files/output_layers_templates/crossentropylossintermediate.prototxt'
+}
 
-echo $OUTPUT_AUX > $PROTOTXT_READY
-cat $SOLVER_BASE | sed "s|ITERS|$ITERS|g" | sed "s|SNAPSHOT_PREFIX|$SNAPSHOT_PREFIX/snapshot_stage_1|g" | sed "s|MODEL_TO_TRAIN|$PROTOTXT_READY|g"> $SOLVER_READY;
-#/home/ubuntu/caffenew/build/tools/caffe train -solver $SOLVER_READY -weights $INITIAL_WEIGHTS 2> $PATH_HERE/data/logs/train_stage.error > $PATH_HERE/data/logs/train_stage.log;
+new_prototxt = PrototxtTemplate(PROTOTXT_BASE, map_template2file)
+new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
-echo "Fine tunning"
+variables_to_replace = {
+    'ITERS' : '10',
+    'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/snapshot_stage_1',
+    'MODELTOTRAIN': PROTOTXT_READY
+}
 
-##Load last snapshot and keep running
-last_snapshot=$(cat data/logs/train_stage.error | grep "Snapshotting to binary proto file" | tail -n 1 | cut -d ' ' -f10)
-echo $last_snapshot
+new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
+new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
-######################################################
-#2nd run
-LR_MULT_LAST_LAYER=0.5;
-DE_MULT_LAST_LAYER=1;
-LR_MULT_BASE_NET=0.5;
-DE_MULT_BASE_NET=1;
-ITERS=1000000;
-OUTPUT_AUX=$(cat $PROTOTXT_BASE | sed "s|loss1/classifier|loss1/classifier_new|g"  | sed "s|loss2/classifier|loss2/classifier_new|g"  | sed "s|loss3/classifier|loss3/classifier_new|g" | sed "s|OUTPUT_NEURONS|$OUTPUT_CLASSES|g")
-OUTPUT_AUX=$(echo $OUTPUT_AUX | sed "s|LR_MULT_BASE_NET|$LR_MULT_BASE_NET|g" | sed "s|DE_MULT_BASE_NET|$DE_MULT_BASE_NET|g" | sed "s|LR_MULT_LAST_LAYER|$LR_MULT_LAST_LAYER|g" | sed "s|DE_MULT_LAST_LAYER|$DE_MULT_LAST_LAYER|g")
-OUTPUT_AUX=$(echo $OUTPUT_AUX | sed "s|VAL_FILENAME|$VAL_FILENAME|g"  | sed "s|TRAIN_FILENAME|$TRAIN_FILENAME|g")
-echo $OUTPUT_AUX > $PROTOTXT_READY
-cat $SOLVER_BASE | sed "s|ITERS|$ITERS|g" | sed "s|SNAPSHOT_PREFIX|$SNAPSHOT_PREFIX/snapshot_stage_2|g" | sed "s|MODEL_TO_TRAIN|$PROTOTXT_READY|g"> $SOLVER_READY;
-#/home/ubuntu/caffenew/build/tools/caffe train -solver $SOLVER_READY -weights $last_snapshot   2> $PATH_HERE/data/logs/train_stage_fine.error > $PATH_HERE/data/logs/train_stage_fine.log;
+system.os('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage.error > ./data/logs/train_stage.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot))
 
 
-######################################################
-#Test
-last_snapshot=$(cat data/logs/train_stage.error | grep "Snapshotting to binary proto file" | tail -n 1 | cut -d ' ' -f10)
-/home/ubuntu/caffenew/build/tools/caffe test -model $PROTOTXT_READY -weights $last_snapshot
+
+#########################################################
+###------------------ 2st stage ----------------------###
+#########################################################
+last_snapshot=subprocess.check_output('cat data/logs/train_stage.error | grep "Snapshotting to binary proto file" | tail -n 1 | cut -d " " -f10', shell = True)
+
+variables_to_replace = {
+    'LRMULTBASENET' : '1',
+    'DEMULTBASENET' : '0.5',
+    'LRMULTLASTLAYER' : '1',
+    'DEMULTLASTLAYER' : '0.5',
+    'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
+    'TRAINFILENAME': TRAIN_FILENAME,
+    'VALFILENAME': VAL_FILENAME
+}
+
+map_template2file = {
+    'inputprototxt' :                   './base_network/my_network/base_files/input_layers_base/train_layers_base.prototxt',
+    'evaltrainstage' :                  './base_network/my_network/base_files/output_layers_templates/final_output_base.prototxt',
+    'crossentropylossintermediate' :    './base_network/my_network/base_files/output_layers_templates/crossentropylossintermediate.prototxt'
+}
+
+new_prototxt = PrototxtTemplate(PROTOTXT_BASE, map_template2file)
+new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
+
+variables_to_replace = {
+    'ITERS' : '10',
+    'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/snapshot_stage_2',
+    'MODELTOTRAIN': PROTOTXT_READY
+}
+
+new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
+new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
+
+system.os('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> ./data/logs/train_stage_2.error > ./data/logs/train_stage_2.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = INITIAL_WEIGHTS))
+
 
