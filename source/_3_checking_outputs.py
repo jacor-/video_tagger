@@ -57,7 +57,7 @@ def loadData(imagename, st):
     ims = st.preprocess(ims)
     return ims
 
-def getOutputData(net, image):
+def getOutputData(net, im):
     net.blobs['data'].data[...] = im.reshape([1, im.shape[0], im.shape[1], im.shape[2]])
     out = net.forward()
     return out['probsout']
