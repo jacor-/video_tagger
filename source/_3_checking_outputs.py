@@ -60,6 +60,6 @@ im = st.preprocess(im)
 
 net.blobs['data'].data[...] = im.reshape([1, im.shape[0], im.shape[1], im.shape[2]])
 out = net.forward()
-print(out['prob_out'])
+print(out['probsout'])
 
 
