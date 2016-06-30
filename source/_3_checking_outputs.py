@@ -38,8 +38,8 @@ variables_to_replace = {
 
 map_template2file = {
     'inputprototxt' :                   './base_network/my_network/base_files/input_layers_base/deploy_input_layers_base.prototxt',
-    'evaltrainstage' :                  './base_network/my_network/base_files/output_layers_templates/final_output_base.prototxt',
-    'crossentropylossintermediate' :    './base_network/my_network/base_files/output_layers_templates/crossentropylossintermediate.prototxt'
+    'evaltrainstage' :                  './base_network/my_network/base_files/output_layers_templates/empty_template.prototxt',
+    'crossentropylossintermediate' :    './base_network/my_network/base_files/output_layers_templates/empty_template.prototxt'
 }
 
 new_prototxt = PrototxtTemplate(prototxt_base, map_template2file)

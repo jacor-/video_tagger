@@ -1,3 +1,14 @@
+layer {
+  type: "Python"
+  name: "labelmodifier"
+  bottom: "<<var#bottomlayer>>"
+  bottom: "label"
+  top: "labelmodifier"
+  python_param {
+    module: 'multilabel_to_monolabel_attention_layer'
+    layer: 'MultilabelToMonolabelAttentionLayer'
+  }
+}
 
 layer {
   name: "loss3/loss"

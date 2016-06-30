@@ -2312,17 +2312,6 @@ layer {
   top: "probsout"
   propagate_down: false
 }
-layer {
-  type: "Python"
-  name: "labelmodifier"
-  bottom: "probsout"
-  bottom: "label"
-  top: "labelmodifier"
-  python_param {
-    module: 'multilabel_to_monolabel_attention_layer'
-    layer: 'MultilabelToMonolabelAttentionLayer'
-  }
-}
 
 
 <<template#evaltrainstage#bottomlayer:loss3/classifier_new#outprobs:probsout>>

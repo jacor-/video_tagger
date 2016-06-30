@@ -1,3 +1,4 @@
+
 layer {
   type: "Python"
   name: "data"
