@@ -50,7 +50,7 @@ new_prototxt.saveOutputPrototxt(prototxt_ready, variables_to_replace)
 
 
 
-def loadData(imagename, st)
+def loadData(imagename, st):
     ims = np.asarray(Image.open(imagename)) # load image
     ims = scipy.misc.imresize(im, imshape) # resize
     ims = st.preprocess(im)
