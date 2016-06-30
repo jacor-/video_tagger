@@ -20,6 +20,8 @@ import sys
 
 sys.path = sys.path + ['./python_datalayers']
 
+print(sys.path)
+
 PROTOTXT_READY='./data/base_network/my_network/ready_files/ready_network.prototxt'
 SOLVER_READY='./data/base_network/my_network/ready_files/ready_solver.prototx'
 
