@@ -65,26 +65,31 @@ class TestNetwork(object):
 
 
 if __name__ == '__main__':
+    #### VARIABLES
 
-    TRAIN_FILENAME="./data/files/filtered_train.txt";
-    command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
-    OUTPUT_CLASSES=int(subprocess.check_output(command, shell = True))
-
-    data_filename = "data/files/filtered_val.txt"
-    dataset = [line.rstrip('\n').split(",") for line in open(data_filename)]
+    ## These variables should be hardcoded
     CLASSIFIER_NAME = 'cluster'
-
-
-
-    imshape = (224,224)
-    prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
-    prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
 
     snapshot_prefix_looked_for = '%s_snapshot_stage_1' % CLASSIFIER_NAME
     model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
 
 
+    ## This loads output classes. It can be hardcoded
+    TRAIN_FILENAME="./data/files/filtered_train.txt";
+    command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
+    OUTPUT_CLASSES=int(subprocess.check_output(command, shell = True))
+    ## This loads images to be tested. It can be hardcoded
+    data_filename = "data/files/filtered_val.txt"
+    dataset = [line.rstrip('\n').split(",") for line in open(data_filename)]
+    
+
+    
     batch_size = 10
+    imshape = (224,224)
+    prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
+    prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
+
+    
     net = TestNetwork(OUTPUTNEURONS, prototxt_base, prototxt_ready, model_file, max_batch_size, imshape)
 
     imagenames = [dataset[i][0] for i in range(10)]
