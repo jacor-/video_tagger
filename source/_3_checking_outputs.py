@@ -36,7 +36,7 @@ class TestNetwork(object):
             'DEMULTBASENET' : '0',
             'LRMULTLASTLAYER' : '1',
             'DEMULTLASTLAYER' : '2',
-            'OUTPUTNEURONS' : str(self.OUTPUT_CLASSES),
+            'OUTPUTNEURONS' : str(self.OUTPUTNEURONS),
         }
 
         map_template2file = {
