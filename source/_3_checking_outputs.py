@@ -18,7 +18,7 @@ import sys
 class TestNetwork(object):
 
     def __init__(self, OUTPUTNEURONS, prototxt_base, prototxt_ready, model_file, max_batch_size, imshape):
-        self.net = net
+        
         self.OUTPUTNEURONS = OUTPUTNEURONS
         self.prototxt_ready = prototxt_ready
         self.max_batch_size = max_batch_size
@@ -28,7 +28,7 @@ class TestNetwork(object):
         self._prepareDeployPrototxts_(prototxt_base)
         net = caffe.Net(prototxt_ready, model_file, caffe.TEST)
         net.blobs['data'].reshape(max_batch_size,3,imshape[0],imshape[1])
-
+        self.net = net
 
     def _prepareDeployPrototxts_(self, prototxt_base):
         variables_to_replace = {
