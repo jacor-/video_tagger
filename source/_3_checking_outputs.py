@@ -62,7 +62,7 @@ class TestNetwork(object):
 
     def getOutputData(self, imagenames):
         data = self._loadData_(imagenames)
-        self.net.blobs['data'].data[...] = im.reshape([data.shape[0], data.shape[1], data.shape[2], data.shape[3]])
+        self.net.blobs['data'].data[...] = data #data.reshape([data.shape[0], data.shape[1], data.shape[2], data.shape[3]])
         out = net.forward()
         return out['probsout']
 
