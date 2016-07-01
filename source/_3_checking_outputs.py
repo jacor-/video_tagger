@@ -12,85 +12,87 @@ import subprocess
 import os
 import sys
 
-imshape = (224,224)
-prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
-prototxt_ready='./data/base_network/my_network/ready_files/ready_network_deploy.prototxt'
-
-snapshot_prefix_looked_for = 'snapshot_stage_1'
-model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
-#model_file='/home/ubuntu/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel'
-
-data_filename = "data/files/filtered_val.txt"
-dataset = [line.rstrip('\n').split(",") for line in open(data_filename)]
-
-
-TRAIN_FILENAME="./data/files/filtered_train.txt";
-command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
-OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))
-
-
-variables_to_replace = {
-    'LRMULTBASENET' : '0',
-    'DEMULTBASENET' : '0',
-    'LRMULTLASTLAYER' : '1',
-    'DEMULTLASTLAYER' : '2',
-    'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
-}
-
-map_template2file = {
-    'inputprototxt' :                   './base_network/my_network/base_files/input_layers_base/deploy_input_layers_base.prototxt',
-    'evaltrainstage' :                  './base_network/my_network/base_files/output_layers_templates/empty_template.prototxt',
-    'crossentropylossintermediate' :    './base_network/my_network/base_files/output_layers_templates/empty_template.prototxt'
-}
-
-new_prototxt = PrototxtTemplate(prototxt_base, map_template2file)
-new_prototxt.saveOutputPrototxt(prototxt_ready, variables_to_replace)
 
 
 
+class TestNetwork(object):
+
+    def __init__(self, OUTPUTNEURONS, prototxt_base, prototxt_ready, model_file, max_batch_size, imshape):
+        self._prepareDeployPrototxts_(OUTPUTNEURONS, prototxt_base, prototxt_ready)
+        net = caffe.Net(prototxt_ready, model_file, caffe.TEST)
+        net.blobs['data'].reshape(max_batch_size,3,imshape[0],imshape[1])
+        self.net = net
+        self.OUTPUTNEURONS = OUTPUTNEURONS
+        self.prototxt_ready = prototxt_ready
+        self.max_batch_size = max_batch_size
+        self.data_container = np.zeros([max_batch_size,3,imshape[0],imshape[1]])
+
+    def _prepareDeployPrototxts_(self, prototxt_base):
+        variables_to_replace = {
+            'LRMULTBASENET' : '0',
+            'DEMULTBASENET' : '0',
+            'LRMULTLASTLAYER' : '1',
+            'DEMULTLASTLAYER' : '2',
+            'OUTPUTNEURONS' : str(self.OUTPUT_CLASSES),
+        }
+
+        map_template2file = {
+            'inputprototxt' :                   './base_network/my_network/base_files/input_layers_base/deploy_input_layers_base.prototxt',
+            'evaltrainstage' :                  './base_network/my_network/base_files/output_layers_templates/empty_template.prototxt',
+            'crossentropylossintermediate' :    './base_network/my_network/base_files/output_layers_templates/empty_template.prototxt'
+        }
+
+        new_prototxt = PrototxtTemplate(prototxt_base, map_template2file)
+        new_prototxt.saveOutputPrototxt(self.prototxt_ready, variables_to_replace)
+
+
+    def _loadData_(self, imagenames):
+        self.data_container *= 0
+        st = SimpleTransformer()
+        
+        for i in range(len(imagenames)):
+            ims = np.asarray(Image.open(imagenames[i])) # load image
+            ims = scipy.misc.imresize(ims, imshape) # resize
+            ims = st.preprocess(ims)
+            loaded_data[i] = ims
+        return loaded_data
+
+    def getOutputData(self, imagenames):
+        data = self._loadData_(imagenames)
+        self.net.blobs['data'].data[...] = im.reshape([data.shape[0], im.shape[1], im.shape[2], im.shape[3]])
+        out = net.forward()
+        return out['probsout']
+
+
+if __name__ == '__main__':
+
+    TRAIN_FILENAME="./data/files/filtered_train.txt";
+    command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
+    OUTPUT_CLASSES=int(subprocess.check_output(command, shell = True))
+
+    data_filename = "data/files/filtered_val.txt"
+    dataset = [line.rstrip('\n').split(",") for line in open(data_filename)]
+    CLASSIFIER_NAME = 'cluster'
 
 
 
-def loadData(imagename, st):
-    ims = np.asarray(Image.open(imagename)) # load image
-    ims = scipy.misc.imresize(ims, imshape) # resize
-    ims = st.preprocess(ims)
-    return ims
+    imshape = (224,224)
+    prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
+    prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
 
-def getOutputData(net, im):
-    net.blobs['data'].data[...] = im.reshape([1, im.shape[0], im.shape[1], im.shape[2]])
-    out = net.forward()
-    return out['probsout']
+    snapshot_prefix_looked_for = '%s_snapshot_stage_1' % CLASSIFIER_NAME
+    model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
 
 
+    batch_size = 10
+    net = TestNetwork(OUTPUTNEURONS, prototxt_base, prototxt_ready, model_file, max_batch_size, imshape)
 
-def initNetwork(prototxt, model_file):
-    net = caffe.Net(prototxt, model_file, caffe.TEST)
-    net.blobs['data'].reshape(1,3,imshape[0],imshape[1])
-    return net
+    imagenames = [dataset[i][0] for i in range(10)]
+    labels = [map(int, list(set(dataset[i][1].split(" ")))) for i in range(10)]
+
+    predictions = net.getOutputData(imagenames)
 
 
-st = SimpleTransformer()
 
-## Load networks (all those networks you will need)
-net = initNetwork(prototxt_ready, model_file)
 
-## Load images and predict. It does not accept batches atm. It will, though
-outputs = []
-labs = []
-count = 0
-for i in range(200):
-    im = loadData(dataset[i][0], st)
-    out = getOutputData(net, im)
-    outputs.append(np.array(out))
 
-    labels = map(int, list(set(dataset[i][1].split(" "))))
-    labs.append(labels)
-
-    if np.argmax(out) in labels:
-        count += 1
-
-outputs = np.array(outputs)
-chosen_labels = np.argmax(outputs, axis=2)
-
-print(count)
