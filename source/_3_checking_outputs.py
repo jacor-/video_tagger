@@ -90,7 +90,7 @@ if __name__ == '__main__':
     prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
 
     
-    net = TestNetwork(OUTPUTNEURONS, prototxt_base, prototxt_ready, model_file, max_batch_size, imshape)
+    net = TestNetwork(OUTPUT_CLASSES, prototxt_base, prototxt_ready, model_file, max_batch_size, imshape)
 
     imagenames = [dataset[i][0] for i in range(10)]
     labels = [map(int, list(set(dataset[i][1].split(" ")))) for i in range(10)]
