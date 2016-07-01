@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('base_network/VictorData/dataset_30c.csv', sep = '#', header = None)
+df = pd.read_csv('base_network/VictorData/dataset_mid.csv', sep = '#', header = None)
 
 df[1] = df[1].map(lambda x: x[1:-1].replace("\"","").split(","))
 
