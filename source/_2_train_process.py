@@ -127,4 +127,5 @@ if __name__ == '__main__':
     command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
     OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))
 
+    print("Training network with name " + CLASSIFIER_NAME)
     trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME)
