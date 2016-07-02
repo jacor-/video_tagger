@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
 
 
-    batch_size = 10
+    batch_size = 500
     imshape = (224,224)
     prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
     prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
