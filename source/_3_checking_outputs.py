@@ -80,7 +80,7 @@ def predictFromFile(net, input_data_file):
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
         labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
 
-        predictions.append(np.copy(net.getOutputData(imagenames))
+        predictions.append(np.copy(net.getOutputData(imagenames)))
 
     if len(dataset) % batch_size != 0:
         print(" - last batch")
@@ -88,7 +88,7 @@ def predictFromFile(net, input_data_file):
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % batch_size)]
         labels += [map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)]
 
-        predictions.append(np.copy(net.getOutputData(imagenames))
+        predictions.append(np.copy(net.getOutputData(imagenames)))
 
     return np.vstack(predictions)[:len(labels)], labels
 
