@@ -95,8 +95,14 @@ if __name__ == '__main__':
 
     net = TestNetwork(OUTPUT_CLASSES, prototxt_base, prototxt_ready, model_file, batch_size, imshape)
 
-    imagenames = [dataset[i][0] for i in range(10)]
-    labels = [map(int, list(set(dataset[i][1].split(" ")))) for i in range(10)]
+    imagenames = [dataset[i][0] for i in range(500)]
+    labels = [map(int, list(set(dataset[i][1].split(" ")))) for i in range(500)]
 
-    predictions = net.getOutputData(imagenames)
+    predictions = net.getOutputData(imagenames).argmax(axis=1)
+
+    acs = 0
+    for i in range(len(predictions)):
+        if predictions[i] in labels[i]:
+            acs += 1
+    print(float(acs) / len(predictions))
 
