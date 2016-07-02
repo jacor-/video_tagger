@@ -128,4 +128,4 @@ if __name__ == '__main__':
     OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))
 
     print("Training network with name " + CLASSIFIER_NAME + " which has " + str(OUTPUT_CLASSES) + ' classes')
-    trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME)
+    #trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME)

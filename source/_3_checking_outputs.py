@@ -18,7 +18,7 @@ import sys
 class TestNetwork(object):
 
     def __init__(self, OUTPUTNEURONS, prototxt_base, prototxt_ready, model_file, max_batch_size, imshape):
-        
+
         self.OUTPUTNEURONS = OUTPUTNEURONS
         self.prototxt_ready = prototxt_ready
         self.max_batch_size = max_batch_size
@@ -52,7 +52,7 @@ class TestNetwork(object):
     def _loadData_(self, imagenames):
         self.data_container *= 0
         st = SimpleTransformer()
-        
+
         for i in range(len(imagenames)):
             ims = np.asarray(Image.open(imagenames[i])) # load image
             ims = scipy.misc.imresize(ims, imshape) # resize
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     ## This loads images to be tested. It can be hardcoded
     data_filename = "data/files/filtered_val.txt"
     dataset = [line.rstrip('\n').split(",") for line in open(data_filename)]
-    
+
 
 
     batch_size = 10
@@ -92,15 +92,16 @@ if __name__ == '__main__':
     prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
     prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
 
-    
+
     net = TestNetwork(OUTPUT_CLASSES, prototxt_base, prototxt_ready, model_file, batch_size, imshape)
 
-    imagenames = [dataset[i][0] for i in range(10)]
-    labels = [map(int, list(set(dataset[i][1].split(" ")))) for i in range(10)]
+    predictions = []
+    labels = []
+    for i in range(len(dataset)/10):
+        imagenames = [dataset[i*10+j][0] for j in range(10)]
+        labels.append([map(int, list(set(dataset[i*10+j][1].split(" ")))) for j in range(10)])
 
-    predictions = net.getOutputData(imagenames)
-
-
+        predictions.append(net.getOutputData(imagenames))
 
 
 
