@@ -75,7 +75,6 @@ def predictFromFile(net, input_data_file):
 
     print("Predicting %d samples from file %s" % (len(dataset),data_filename))
     batch_size = net.max_batch_size
-    print(batch_size)
     for i in range(len(dataset)/batch_size):
         print(" - batch %d out of %d" % (i, len(dataset)/batch_size))
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
@@ -91,7 +90,7 @@ def predictFromFile(net, input_data_file):
 
         predictions.append(net.getOutputData(imagenames))
 
-    return predict, labels
+    return predictions, labels
 
 def getPredefinedVariables():
     return {
@@ -126,5 +125,5 @@ if __name__ == '__main__':
     vrs = getPredefinedVariables()
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'])
     t1 = time.time()
-    predictFromFile(net, "data/files/filtered_val.txt")
+    predictions, labels = predictFromFile(net, "data/files/filtered_val.txt")
     print(time.time()-t1)
