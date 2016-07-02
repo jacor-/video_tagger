@@ -111,12 +111,13 @@ if __name__ == '__main__':
     ## These variables should be hardcoded
     CLASSIFIER_NAME = 'midtag'
     OUTPUT_CLASSES = _aux_getNumberOfCasses("./data/files/filtered_train.txt")
-    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot: " + model_file)
+    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes")
 
 
     ## This loads output classes. It can be hardcoded
     vrs = getPredefinedVariables()
-    net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], vrs['model_file'], vrs['batch_size'], vrs['imshape'])
+    print(" - Snapshot: " + vrs['model_file'])
 
+    net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], vrs['model_file'], vrs['batch_size'], vrs['imshape'])
     predictFromFile(net, "data/files/filtered_val.txt")
 
