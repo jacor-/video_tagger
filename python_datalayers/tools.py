@@ -9,7 +9,7 @@ class SimpleTransformer:
     images for caffe.
     """
 
-    def __init__(self, mean=[128, 128, 128, 128]):
+    def __init__(self, mean=[128, 128, 128]):
         self.mean = np.array(mean, dtype=np.float32)
         self.scale = 1.0
 
