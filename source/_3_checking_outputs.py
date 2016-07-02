@@ -80,17 +80,16 @@ def predictFromFile(net, input_data_file):
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
         labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
 
-        predictions.append(net.getOutputData(imagenames))
+        predictions.append(np.copy(net.getOutputData(imagenames))
 
-    '''
     if len(dataset) % batch_size != 0:
         print(" - last batch")
         first_index = batch_size*(len(dataset)/batch_size)
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % batch_size)]
         labels += [map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)]
 
-        predictions.append(net.getOutputData(imagenames))
-    '''
+        predictions.append(np.copy(net.getOutputData(imagenames))
+
     return np.vstack(predictions)[:len(labels)], labels
 
 def getPredefinedVariables(CLASSIFIER_NAME):
@@ -133,10 +132,10 @@ if __name__ == '__main__':
 
     accs = 0.
     preds = predictions.argmax(axis=1)
-    for i in range(predictions.shape[0]):
-        if preds[i] in labels[i]:
+    for i in range(predictions[:-500].shape[0]):
+        if preds[-i-1] in labels[-1-i]:
             accs += 1
-    print(accs / predictions.shape[0])
+        print(accs / predictions.shape[0])
 
 '''
 import caffe
