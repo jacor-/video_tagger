@@ -78,9 +78,10 @@ def predictFromFile(net, input_data_file):
     for i in range(len(dataset)/batch_size):
         print(" - batch %d out of %d" % (i, len(dataset)/batch_size))
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
-        labels.append([map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)])
+        labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
 
         predictions.append(net.getOutputData(imagenames))
+        break
 
     if len(dataset) % batch_size != 0:
         print(" - last batch")
@@ -130,3 +131,9 @@ if __name__ == '__main__':
     predictions, labels = predictFromFile(net, "data/files/filtered_val.txt")
     print(time.time()-t1)
 
+accs = 0.
+preds = predictions.argmax(axis=1)
+for i in range(predictions.shape[0]):
+    if preds[i] in labels[i]:
+        accs += 1
+print(accs / predictions.shape[0])
