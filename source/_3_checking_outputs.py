@@ -1,4 +1,4 @@
-
+import os
 from PythonicNetwork import TestNetwork
 from _stupid_tools_and_helpers_scripting import _aux_getNumberOfCasses, _aux_getSnapshotToBeused, _getPredefinedVariables_
 import time
