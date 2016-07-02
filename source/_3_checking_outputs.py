@@ -61,7 +61,7 @@ class TestNetwork(object):
             print(ims.shape)
             print(self.data_container.shape)
             self.data_container[i] = ims
-        return st.preprocess(self.data_container)
+        return st.preprocessBatch(self.data_container)
 
     def getOutputData(self, imagenames):
         data = self._loadData_(imagenames)
