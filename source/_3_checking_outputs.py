@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
 
     ## This loads output classes. It can be hardcoded
-    vrs = getPredefinedVariables(CLASSIFIER_NAME)
+    vrs = _getPredefinedVariables_(CLASSIFIER_NAME)
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'])
 
     print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
