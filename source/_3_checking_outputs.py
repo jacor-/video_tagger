@@ -2,6 +2,7 @@
 from PythonicNetwork import TestNetwork
 from _stupid_tools_and_helpers_scripting import _aux_getNumberOfCasses, _aux_getSnapshotToBeused, _getPredefinedVariables_
 import time
+import numpy as np
 
 def predictFromFile(net, input_data_file):
     data_filename = input_data_file
