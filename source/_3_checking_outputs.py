@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
 
 
-    batch_size = 10
+    batch_size = 100
     imshape = (224,224)
     prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
     prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
@@ -97,13 +97,13 @@ if __name__ == '__main__':
 
     predictions = []
     labels = []
-    '''
+
     for i in range(len(dataset)/10):
         imagenames = [dataset[i*10+j][0] for j in range(10)]
         labels.append([map(int, list(set(dataset[i*10+j][1].split(" ")))) for j in range(10)])
 
         predictions.append(net.getOutputData(imagenames))
-    '''
+
     if len(dataset) % 10 != 0:
         first_index = 10*(len(dataset)/10)
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % 10)]

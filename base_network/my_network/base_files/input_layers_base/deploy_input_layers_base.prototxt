@@ -1,7 +1,7 @@
 
   input: "data"
   input_shape: {
-     dim:10
+     dim:100
      dim:3
      dim:224
      dim:224
