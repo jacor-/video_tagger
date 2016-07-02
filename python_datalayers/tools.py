@@ -48,7 +48,7 @@ class SimpleTransformer:
 
         im = np.float32(im)
         im = im[:, :, :, ::-1]  # change to BGR
-        im -= self.mean
+        im -= self.mean[0]
         im *= self.scale
         im = im.transpose((0, 3, 1, 2))
 
