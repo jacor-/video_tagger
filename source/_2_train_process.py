@@ -5,7 +5,7 @@
 ## The script takes prepares two runs of the network:
 ##
 ## - 1st run:
-##      . we set the whole network learning rates to 0, so we are sure the original weights will remain as they are. 
+##      . we set the whole network learning rates to 0, so we are sure the original weights will remain as they are.
 ##      . We add a new layer on top of the original network with learning rate != 0. We will teach this layer to map the original network's output features to our labels
 ## - 2nd run:
 ##      . We initialize the network with the latest weights from the previous run (so the last layer has been trained). TODO: In the future, we should keep the best snapshot!
