@@ -22,7 +22,7 @@ class TestNetwork(object):
         self.OUTPUTNEURONS = OUTPUTNEURONS
         self.prototxt_ready = prototxt_ready
         self.max_batch_size = max_batch_size
-        self.data_container = np.zeros([max_batch_size,imshape[0],imshape[1],imshape[2]])
+        self.data_container = np.zeros([max_batch_size,imshape[2],imshape[0],imshape[1]])
         self.imshape = imshape
 
         self._prepareDeployPrototxts_(prototxt_base)
@@ -60,8 +60,8 @@ class TestNetwork(object):
             ims = scipy.misc.imresize(ims, self.imshape) # resize
             print(ims.shape)
             print(self.data_container.shape)
-            self.data_container[i] = ims
-        return st.preprocessBatch(self.data_container)
+            self.data_container[i] = st.preprocess(ims)
+        return self.data_container
 
     def getOutputData(self, imagenames):
         data = self._loadData_(imagenames)
