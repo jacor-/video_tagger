@@ -1,6 +1,7 @@
 import subprocess
 import os
 
+
 def _getPredefinedVariables_(CLASSIFIER_NAME):
     return {
         'batch_size' : 500,
