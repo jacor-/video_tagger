@@ -105,19 +105,23 @@ def _aux_getNumberOfCasses(filename):
     OUTPUT_CLASSES=int(subprocess.check_output(command, shell = True))
     return OUTPUT_CLASSES
 
+def _aux_getSnapshotToBeused(classifier_name):
+    snapshot_prefix_looked_for = '%s_snapshot_stage_2' % classifier_name
+    model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
+    return model_file
+
 if __name__ == '__main__':
     #### VARIABLES
 
     ## These variables should be hardcoded
     CLASSIFIER_NAME = 'midtag'
     OUTPUT_CLASSES = _aux_getNumberOfCasses("./data/files/filtered_train.txt")
-    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes")
+    model_file = _aux_getSnapshotToBeused(CLASSIFIER_NAME)
+    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
 
 
     ## This loads output classes. It can be hardcoded
     vrs = getPredefinedVariables()
-    print(" - Snapshot: " + vrs['model_file'])
-
-    net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], vrs['model_file'], vrs['batch_size'], vrs['imshape'])
+    net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'])
     predictFromFile(net, "data/files/filtered_val.txt")
 
