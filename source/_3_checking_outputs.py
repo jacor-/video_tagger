@@ -73,7 +73,7 @@ if __name__ == '__main__':
     ## These variables should be hardcoded
     CLASSIFIER_NAME = 'midtag'
 
-    snapshot_prefix_looked_for = '%s_snapshot_stage_1' % CLASSIFIER_NAME
+    snapshot_prefix_looked_for = '%s_snapshot_stage_2' % CLASSIFIER_NAME
     model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
 
 
