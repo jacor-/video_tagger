@@ -74,7 +74,7 @@ def predictFromFile(net, input_data_file):
     labels = []
 
     print("Predicting %d samples from file %s" % (len(dataset),data_filename))
-    batch_size = net.imshape[0]
+    batch_size = max_batch_size
     print(batch_size)
     for i in range(len(dataset)/batch_size):
         print(" - batch %d out of %d" % (i, len(dataset)/batch_size))
