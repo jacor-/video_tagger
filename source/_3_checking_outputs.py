@@ -10,14 +10,14 @@ def predictFromFile(net, input_data_file):
 
     predictions = []
     labels = []
-
+    hashes = []
     print("Predicting %d samples from file %s" % (len(dataset),data_filename))
     batch_size = net.max_batch_size
     for i in range(len(dataset)/batch_size):
         print(" - batch %d out of %d" % (i, len(dataset)/batch_size))
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
         labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
-
+        hashes += imagenames
         predictions.append(np.copy(net.getOutputData(imagenames)))
 
     if len(dataset) % batch_size != 0:
@@ -25,10 +25,10 @@ def predictFromFile(net, input_data_file):
         first_index = batch_size*(len(dataset)/batch_size)
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % batch_size)]
         labels += [map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)]
-
+        hashes += imagenames
         predictions.append(np.copy(net.getOutputData(imagenames)))
 
-    return np.vstack(predictions)[:len(labels)], labels
+    return np.vstack(predictions)[:len(labels)], labels, hashes
 
 
 def getAccuracy(predictions, labels):
@@ -41,22 +41,35 @@ def getAccuracy(predictions, labels):
 
 
 if __name__ == '__main__':
+    os.system('mkdir -p data/raw_results')
+
     #### VARIABLES
 
     ## These variables should be hardcoded
     CLASSIFIER_NAME = 'midtag'
     OUTPUT_CLASSES = _aux_getNumberOfCasses("./data/files/filtered_train.txt")
     model_file = _aux_getSnapshotToBeused(CLASSIFIER_NAME)
+    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
+
 
 
     ## This loads output classes. It can be hardcoded
     vrs = _getPredefinedVariables_(CLASSIFIER_NAME)
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'])
 
-    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
+    t1 = time.time()
+    predictions_val, labels_val, hashes_val = predictFromFile(net, "data/files/filtered_val.txt")
+    print(time.time()-t1)
+    print("Final accuracy: " + str(getAccuracy(predictions_val, labels_val)))
+    np.save('data/raw_results/val_results.npy', predictions_val)
+    np.save('data/raw_results/val_hashes.npy', hashes_val)
+    np.save('data/raw_results/val_label.npy', labels_val)
 
     t1 = time.time()
-    predictions, labels = predictFromFile(net, "data/files/filtered_val.txt")
+    predictions_train, labels_train, hashes_train = predictFromFile(net, "data/files/filtered_train.txt")
     print(time.time()-t1)
+    print("Final accuracy: " + str(getAccuracy(predictions_train, labels_train)))
+    np.save('data/raw_results/train_results.npy', predictions_train)
+    np.save('data/raw_results/train_hashes.npy', hashes_train)
+    np.save('data/raw_results/train_label.npy', labels_train)
 
-    print("Final accuracy: " + str(getAccuracy(predictions, labels)))
