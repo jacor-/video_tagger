@@ -55,6 +55,7 @@ class TestNetwork(object):
 
         for i in range(len(imagenames)):
             ims = np.asarray(Image.open(imagenames[i])) # load image
+            print(ims.shape)
             ims = scipy.misc.imresize(ims, self.imshape) # resize
             self.data_container[i] = ims
         return st.preprocess(self.data_container)
