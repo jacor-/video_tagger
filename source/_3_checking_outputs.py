@@ -118,12 +118,14 @@ if __name__ == '__main__':
     CLASSIFIER_NAME = 'midtag'
     OUTPUT_CLASSES = _aux_getNumberOfCasses("./data/files/filtered_train.txt")
     model_file = _aux_getSnapshotToBeused(CLASSIFIER_NAME)
-    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
 
 
     ## This loads output classes. It can be hardcoded
     vrs = getPredefinedVariables()
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'])
+
+    print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
+
     t1 = time.time()
     predictions, labels = predictFromFile(net, "data/files/filtered_val.txt")
     print(time.time()-t1)
