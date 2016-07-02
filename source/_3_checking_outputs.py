@@ -11,7 +11,7 @@ from template_tools.template_manager1 import PrototxtTemplate
 import subprocess
 import os
 import sys
-
+import time
 
 
 
@@ -123,5 +123,6 @@ if __name__ == '__main__':
     ## This loads output classes. It can be hardcoded
     vrs = getPredefinedVariables()
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'])
+    t1 = time.time()
     predictFromFile(net, "data/files/filtered_val.txt")
-
+    print(time.time()-t1)
