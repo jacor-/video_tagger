@@ -86,11 +86,11 @@ def predictFromFile(net, input_data_file):
         print(" - last batch")
         first_index = batch_size*(len(dataset)/batch_size)
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % batch_size)]
-        labels.append([map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)])
+        labels += [map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)]
 
         predictions.append(net.getOutputData(imagenames))
 
-    return predictions, labels
+    return np.vstack(predictions)[:len(labels)], labels
 
 def getPredefinedVariables():
     return {
@@ -127,3 +127,4 @@ if __name__ == '__main__':
     t1 = time.time()
     predictions, labels = predictFromFile(net, "data/files/filtered_val.txt")
     print(time.time()-t1)
+
