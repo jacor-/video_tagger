@@ -73,7 +73,7 @@ def predictFromFile(net, input_data_file):
     predictions = []
     labels = []
 
-    print("Predicting %d samples from file %s" % (len(dataset),data_file))
+    print("Predicting %d samples from file %s" % (len(dataset),data_filename))
     batch_size = net.imshape[0]
     print(batch_size)
     for i in range(len(dataset)/batch_size):
