@@ -81,7 +81,6 @@ def predictFromFile(net, input_data_file):
         labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
 
         predictions.append(net.getOutputData(imagenames))
-        break
 
     '''
     if len(dataset) % batch_size != 0:
