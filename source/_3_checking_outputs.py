@@ -26,7 +26,7 @@ class TestNetwork(object):
         self.imshape = imshape
 
         self._prepareDeployPrototxts_(prototxt_base)
-        net = caffe.Net(prototxt_ready, model_file +"inventao", caffe.TEST)
+        net = caffe.Net(prototxt_ready, model_file, caffe.TEST)
         net.blobs['data'].reshape(max_batch_size,imshape[2],imshape[0],imshape[1])
         self.net = net
 
@@ -57,7 +57,7 @@ class TestNetwork(object):
             ims = np.asarray(Image.open(imagenames[i])) # load image
             print("mierder")
             print(ims.shape)
-            ims = scipy.misc.imresize(ims, self.imshape) # resize
+            ims = scipy.misc.imresize(ims, [224,224]) # resize
             print(ims.shape)
             print(self.data_container.shape)
             self.data_container[i] = st.preprocess(ims)
