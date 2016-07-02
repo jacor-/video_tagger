@@ -4,13 +4,13 @@ test_iter: 5
 test_interval: 250
 test_initialization: false
 display: 100
-average_loss: 1
+#average_loss: 1
 base_lr: 0.01
 lr_policy: "poly"
 power: 0.5
 max_iter: <<var#ITERS>>
 momentum: 0.9
 weight_decay: 0.0002
-snapshot: 2500
+snapshot: 750
 snapshot_prefix: "<<var#SNAPSHOTPREFIX>>"
 solver_mode: CPU
