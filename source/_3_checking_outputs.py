@@ -98,13 +98,16 @@ if __name__ == '__main__':
     predictions = []
     labels = []
 
+    print("Predicting %d samples" % len(dataset))
     for i in range(len(dataset)/10):
+        print(" - batch %d" %i)
         imagenames = [dataset[i*10+j][0] for j in range(10)]
         labels.append([map(int, list(set(dataset[i*10+j][1].split(" ")))) for j in range(10)])
 
         predictions.append(net.getOutputData(imagenames))
 
     if len(dataset) % 10 != 0:
+        print(" - last batch")
         first_index = 10*(len(dataset)/10)
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % 10)]
         labels.append([map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % 10)])
