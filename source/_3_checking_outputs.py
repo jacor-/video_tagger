@@ -22,7 +22,7 @@ class TestNetwork(object):
         self.OUTPUTNEURONS = OUTPUTNEURONS
         self.prototxt_ready = prototxt_ready
         self.max_batch_size = max_batch_size
-       self.data_container = np.zeros([max_batch_size,3,imshape[0],imshape[1]])
+        self.data_container = np.zeros([max_batch_size,3,imshape[0],imshape[1]])
         self.imshape = imshape
 
         self._prepareDeployPrototxts_(prototxt_base)
