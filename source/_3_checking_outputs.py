@@ -22,12 +22,12 @@ class TestNetwork(object):
         self.OUTPUTNEURONS = OUTPUTNEURONS
         self.prototxt_ready = prototxt_ready
         self.max_batch_size = max_batch_size
-        self.data_container = np.zeros([max_batch_size,imshape[0],imshape[1],imshape[2]])
+        self.data_container = np.zeros([max_batch_size,imshape[2],imshape[0],imshape[1]])
         self.imshape = imshape
 
         self._prepareDeployPrototxts_(prototxt_base)
         net = caffe.Net(prototxt_ready, model_file, caffe.TEST)
-        net.blobs['data'].reshape(max_batch_size,imshape[0],imshape[1],imshape[2])
+        net.blobs['data'].reshape(max_batch_size,imshape[2],imshape[0],imshape[1])
         self.net = net
 
     def _prepareDeployPrototxts_(self, prototxt_base):
