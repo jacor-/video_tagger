@@ -92,24 +92,16 @@ def predictFromFile(net, input_data_file):
 
     return np.vstack(predictions)[:len(labels)], labels
 
-def getPredefinedVariables(CLASSIFIER_NAME):
-    return {
-        'batch_size' : 500,
-        'imshape' : (224,224),
-        'prototxt_base' : './base_network/my_network/base_files/googlenetbase.prototxt',
-        'prototxt_ready' : './data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
-    }
+def getAccuracy(predictions, labels):
+    accs = 0.
+    preds = predictions.argmax(axis=1)
+    for i in range(predictions.shape[0]):
+        if preds[i] in labels[i]:
+            accs += 1
+    return accs / predictions.shape[0]
 
-def _aux_getNumberOfCasses(filename):
-    TRAIN_FILENAME=filename
-    command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
-    OUTPUT_CLASSES=int(subprocess.check_output(command, shell = True))
-    return OUTPUT_CLASSES
 
-def _aux_getSnapshotToBeused(classifier_name):
-    snapshot_prefix_looked_for = '%s_snapshot_stage_2' % classifier_name
-    model_file='data/snapshots/' + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir('data/snapshots') if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
-    return model_file
+from source._stupid_tools_and_helpers_scripting import _aux_getNumberOfCasses, _aux_getSnapshotToBeused, _getPredefinedVariables_
 
 if __name__ == '__main__':
     #### VARIABLES
@@ -130,16 +122,4 @@ if __name__ == '__main__':
     predictions, labels = predictFromFile(net, "data/files/filtered_val.txt")
     print(time.time()-t1)
 
-    accs = 0.
-    preds = predictions.argmax(axis=1)
-    for i in range(predictions[:-500].shape[0]):
-        if preds[-i-1] in labels[-1-i]:
-            accs += 1
-        print(accs / predictions.shape[0])
-
-'''
-import caffe
-classifier_name = 'midtag'
-proto = './data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % classifier_name
-caffe.Net(proto, 'data/snapshots/midtag_snapshot_stage_2_iter_5000.caffemodel', caffe.TEST)
-'''
+    print("Final accuracy: " + str(getAccuracy(predictions, labels)))
