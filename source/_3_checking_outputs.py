@@ -78,16 +78,13 @@ def predictFromFile(net, input_data_file):
 
     print("Predicting %d samples from file %s" % (len(dataset),data_filename))
     batch_size = net.max_batch_size
-
-    MAX_i = 100
     for i in range(len(dataset)/batch_size):
         print(" - batch %d out of %d" % (i, len(dataset)/batch_size))
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
         labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
 
         predictions.append(net.getOutputData(imagenames))
-        if i >= MAX_i:
-            break
+        break
 
     if len(dataset) % batch_size != 0:
         print(" - last batch")
