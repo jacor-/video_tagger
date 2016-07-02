@@ -131,9 +131,10 @@ if __name__ == '__main__':
     predictions, labels = predictFromFile(net, "data/files/filtered_val.txt")
     print(time.time()-t1)
 
-accs = 0.
-preds = predictions.argmax(axis=1)
-for i in range(predictions.shape[0]):
-    if preds[i] in labels[i]:
-        accs += 1
-print(accs / predictions.shape[0])
+    accs = 0.
+    preds = predictions.argmax(axis=1)
+    for i in range(predictions.shape[0]):
+        if preds[i] in labels[i]:
+            accs += 1
+    print(accs / predictions.shape[0])
+
