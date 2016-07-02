@@ -83,6 +83,7 @@ def predictFromFile(net, input_data_file):
         predictions.append(net.getOutputData(imagenames))
         break
 
+    '''
     if len(dataset) % batch_size != 0:
         print(" - last batch")
         first_index = batch_size*(len(dataset)/batch_size)
@@ -90,7 +91,7 @@ def predictFromFile(net, input_data_file):
         labels += [map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)]
 
         predictions.append(net.getOutputData(imagenames))
-
+    '''
     return np.vstack(predictions)[:len(labels)], labels
 
 def getPredefinedVariables(CLASSIFIER_NAME):
