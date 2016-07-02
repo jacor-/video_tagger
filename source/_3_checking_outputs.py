@@ -92,7 +92,7 @@ if __name__ == '__main__':
     prototxt_base='./base_network/my_network/base_files/googlenetbase.prototxt'
     prototxt_ready='./data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
 
-    print("Testing " + CLASSIFIER_NAME + " with " + OUTPUTNEURONS + " classes. Snapshot: " + model_file)
+    print("Testing " + CLASSIFIER_NAME + " with " + OUTPUT_CLASSES + " classes. Snapshot: " + model_file)
     net = TestNetwork(OUTPUT_CLASSES, prototxt_base, prototxt_ready, model_file, batch_size, imshape)
     '''
     predictions = []
