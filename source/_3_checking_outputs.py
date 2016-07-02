@@ -22,12 +22,12 @@ class TestNetwork(object):
         self.OUTPUTNEURONS = OUTPUTNEURONS
         self.prototxt_ready = prototxt_ready
         self.max_batch_size = max_batch_size
-        self.data_container = np.zeros([max_batch_size,imshape[2],imshape[0],imshape[1]])
+       self.data_container = np.zeros([max_batch_size,3,imshape[0],imshape[1]])
         self.imshape = imshape
 
         self._prepareDeployPrototxts_(prototxt_base)
         net = caffe.Net(prototxt_ready, model_file, caffe.TEST)
-        net.blobs['data'].reshape(max_batch_size,imshape[2],imshape[0],imshape[1])
+        net.blobs['data'].reshape(max_batch_size,3,imshape[0],imshape[1])
         self.net = net
 
     def _prepareDeployPrototxts_(self, prototxt_base):
@@ -55,12 +55,9 @@ class TestNetwork(object):
 
         for i in range(len(imagenames)):
             ims = np.asarray(Image.open(imagenames[i])) # load image
-            print("mierder")
-            print(ims.shape)
-            ims = scipy.misc.imresize(ims, [224,224]) # resize
-            print(ims.shape)
-            print(self.data_container.shape)
-            self.data_container[i] = st.preprocess(ims)
+            ims = scipy.misc.imresize(ims, imshape) # resize
+            ims = st.preprocess(ims)
+            self.data_container[i] = ims
         return self.data_container
 
     def getOutputData(self, imagenames):
@@ -99,7 +96,7 @@ def predictFromFile(net, input_data_file):
 def getPredefinedVariables(CLASSIFIER_NAME):
     return {
         'batch_size' : 500,
-        'imshape' : (224,224,3),
+        'imshape' : (224,224),
         'prototxt_base' : './base_network/my_network/base_files/googlenetbase.prototxt',
         'prototxt_ready' : './data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
     }
