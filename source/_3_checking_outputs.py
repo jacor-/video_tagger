@@ -26,7 +26,7 @@ class TestNetwork(object):
         self.imshape = imshape
 
         self._prepareDeployPrototxts_(prototxt_base)
-        net = caffe.Net(prototxt_ready, model_file, caffe.TEST)
+        net = caffe.Net(prototxt_ready, model_file +"inventao", caffe.TEST)
         net.blobs['data'].reshape(max_batch_size,imshape[2],imshape[0],imshape[1])
         self.net = net
 
@@ -96,7 +96,7 @@ def predictFromFile(net, input_data_file):
 
     return np.vstack(predictions)[:len(labels)], labels
 
-def getPredefinedVariables():
+def getPredefinedVariables(CLASSIFIER_NAME):
     return {
         'batch_size' : 500,
         'imshape' : (224,224,3),
@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
 
     ## This loads output classes. It can be hardcoded
-    vrs = getPredefinedVariables()
+    vrs = getPredefinedVariables(CLASSIFIER_NAME)
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'])
 
     print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
@@ -141,3 +141,9 @@ if __name__ == '__main__':
             accs += 1
     print(accs / predictions.shape[0])
 
+'''
+import caffe
+classifier_name = 'midtag'
+proto = './data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % classifier_name
+caffe.Net(proto, 'data/snapshots/midtag_snapshot_stage_2_iter_5000.caffemodel', caffe.TEST)
+'''
