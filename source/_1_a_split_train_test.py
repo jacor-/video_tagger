@@ -1,18 +1,26 @@
+###
+#
+# This script transforms the provided labels into categorical variables numbered between [0-NUM_CLASSES-1]. A file called classes.npy
+# is saved in order to allow the translation of the final predicted labels into the original labels.
+#
+###
+
 
 ## You can load the LabelEncoder (to get the text instead of the label number):
 #encoder = LabelEncoder()
 #encoder.classes_ = numpy.load('data/files/classes.npy')
 
-
-minimum_samples_per_tag = 30
-
-
-
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
 import numpy as np
+from settings import settings
 
-df = pd.read_csv('base_network/VictorData/dataset_mid.csv', sep = '#', header = None)
+minimum_samples_per_tag = settings['minimum_samples_per_tag']
+
+
+
+
+df = pd.read_csv(settings['dataset_filename'], sep = '#', header = None)
 
 df[1] = df[1].map(lambda x: x[1:-1].replace("\"","").split(","))
 
@@ -37,11 +45,8 @@ assert len(should_be_empty) == 0, 'Fuck shit!'
 
 df = df[df['labels'].map(len) > 0]
 
-df[[0, 'labels', 2]].to_csv('data/files/prepared_dataset.csv', index = False, header = False)
+df[[0, 'labels', 2]].to_csv(settings['processed_labels_csv'], index = False, header = False)
 
 
-np.save('data/files/classes.npy', le.classes_)
-
-#encoder = LabelEncoder()
-#encoder.classes_ = numpy.load('data/files/classes.npy')
+np.save(settings['processed_labels_2_original_label'], le.classes_)
 

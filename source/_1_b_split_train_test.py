@@ -1,19 +1,21 @@
-##
+####
 ## We split the samples prepared by the previous script in train and validation and store the resulting datasets in two different files (caffe style)
-## 
 ##
+## Please, notice that the last step is to check that all the images we write in the training files actually exists in the image folder.
+####
 import os
 import pandas as pd
+from settings import settings
 
 
-input_file_train = 'data/files/train.txt'
-output_file_train = 'data/files/filtered_train.txt'
-input_file_test = 'data/files/val.txt'
-output_file_test = 'data/files/filtered_val.txt'
+output_file_train_aux = settings['output_file_train'] + "_aux"
+output_file_train = settings['output_file_train']
+output_file_test_aux = settings['output_file_test'] + "_aux"
+output_file_test = settings['output_file_test']
 
 #os.system("for filename in $(ls -lah data/images/ | grep ' 0 ' | cut -d ' ' -f12); do rm data/images/$filename; done;")
 
-available_images = os.listdir('data/images')
+available_images = os.listdir(settings['image_path'])
 
 
 val_sample = 0.3
@@ -21,7 +23,7 @@ val_sample = 0.3
 
 
 
-df = pd.read_csv('data/files/prepared_dataset.csv', header = None)
+df = pd.read_csv(settings['processed_labels_csv'], header = None)
 unique_videos = df[2].unique()
 
 valid_samples = int(unique_videos.shape[0] * 0.3)
@@ -33,22 +35,21 @@ df_train = df[df[2].isin(train_hashes)]
 df_valid = df[df[2].isin(valid_hashes)]
 
 
-f = open(input_file_train, 'w')
+f = open(output_file_train_aux, 'w')
 for i in df_train.index:
     hash, labels, video = df_train.ix[i]
-    f.write("data/images/" + hash + ".jpg," + str(' '.join(labels[1:-1].lstrip().rstrip().split(None))) + "," + str(video) + "\n")
+    f.write(settings['images_path'] + "/" + hash + ".jpg," + str(' '.join(labels[1:-1].lstrip().rstrip().split(None))) + "," + str(video) + "\n")
 f.close()
 
-f = open(input_file_test, 'w')
+f = open(output_file_test_aux, 'w')
 for i in df_valid.index:
     hash, labels, video = df_valid.ix[i]
-    f.write("data/images/" + hash + ".jpg," + str(' '.join(labels[1:-1].lstrip().rstrip().split(None))) + "," + str(video) + "\n")
+    f.write(settings['images_path'] + "7" + hash + ".jpg," + str(' '.join(labels[1:-1].lstrip().rstrip().split(None))) + "," + str(video) + "\n")
 f.close()
 
-
-
-
-
+####
+## This step is necessary to be sure that all the images we write in the training files do actually exist in the images folder!
+####
 
 def filter_datafiles(input_file, output_file, available_images):
 
@@ -70,8 +71,5 @@ def filter_datafiles(input_file, output_file, available_images):
         f.write(line)
     f.close()
 
-
-
-
-filter_datafiles(input_file_train, output_file_train, available_images)
-filter_datafiles(input_file_test, output_file_test, available_images)
+filter_datafiles(output_file_train_aux, output_file_train, available_images)
+filter_datafiles(output_file_test_aux, output_file_test, available_images)

@@ -17,8 +17,7 @@ from template_tools.template_manager1 import PrototxtTemplate
 import subprocess
 import os
 import sys
-
-sys.path = sys.path + [subprocess.check_output('pwd', shell = True)[:-1] + '/python_datalayers']
+from settings import settings
 
 
 def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME):
