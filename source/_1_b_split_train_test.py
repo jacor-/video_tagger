@@ -15,7 +15,7 @@ output_file_test = settings['output_file_test']
 
 #os.system("for filename in $(ls -lah data/images/ | grep ' 0 ' | cut -d ' ' -f12); do rm data/images/$filename; done;")
 
-available_images = os.listdir(settings['image_path'])
+available_images = os.listdir(settings['images_path'])
 
 
 val_sample = 0.3
