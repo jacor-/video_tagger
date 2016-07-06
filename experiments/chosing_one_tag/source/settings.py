@@ -36,8 +36,8 @@ settings = {
     'SOLVER_READY':'%s/data/base_network/my_network/ready_files/%s_ready_solver.prototx' % (experiment_path, experiment_name),
 
     #Path where we will save the snapshots which are going to be produced when training the network
-    'SNAPSHOT_PREFIX':'%s/data/snapshots' % CLASSIFIER_NAME,
-    'LOGS_PATH':'%s/data/logs' % CLASSIFIER_NAME
+    'SNAPSHOT_PREFIX':'%s/data/snapshots' % experiment_path,
+    'LOGS_PATH':'%s/data/logs' % experiment_path
 }
 
 
