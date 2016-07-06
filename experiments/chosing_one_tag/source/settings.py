@@ -3,7 +3,7 @@ experiment_path = 'experiments/chosing_one_tag'
 experiment_name = 'midtag'
 settings = {
 
-    'dataset_filename': '%s/base_network/VictorData/dataset_mid.csv' % experiment_path,
+    'dataset_filename': '%s/base_network/input_data/dataset_mid.csv' % experiment_path,
     'images_path': 'images',
     'minimum_samples_per_tag': 30,
 
