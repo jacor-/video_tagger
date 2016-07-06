@@ -7,8 +7,8 @@ def _getPredefinedVariables_(CLASSIFIER_NAME):
     return {
         'batch_size' : 500,
         'imshape' : (224,224),
-        'prototxt_base' : './base_network/my_network/base_files/googlenetbase.prototxt',
-        'prototxt_ready' : './data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
+        'prototxt_base' : settings['experiment_path'] + '/base_network/my_network/base_files/googlenetbase.prototxt',
+        'prototxt_ready' : settings['experiment_path'] + '/data/base_network/my_network/ready_files/%s_ready_network_deploy.prototxt' % CLASSIFIER_NAME
     }
 
 def _aux_getNumberOfCasses(filename):
