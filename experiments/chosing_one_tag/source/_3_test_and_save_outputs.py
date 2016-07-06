@@ -1,5 +1,5 @@
 import os
-from PythonicNetwork import TestNetwork
+from PythonNetwork.PythonicNetwork import TestNetwork
 from _stupid_tools_and_helpers_scripting import _aux_getNumberOfCasses, _aux_getSnapshotToBeused, _getPredefinedVariables_
 import time
 import numpy as np
@@ -19,7 +19,7 @@ def predictFromFile(net, input_data_file):
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
         labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
         hashes += imagenames
-        predictions.append(np.copy(net.getOutputData(imagenames)))
+        predictions.append(np.copy(net.getOutputData(imagenames, 'probsout')[0]))
 
     if len(dataset) % batch_size != 0:
         print(" - last batch")
@@ -27,7 +27,7 @@ def predictFromFile(net, input_data_file):
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % batch_size)]
         labels += [map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)]
         hashes += imagenames
-        predictions.append(np.copy(net.getOutputData(imagenames)))
+        predictions.append(np.copy(net.getOutputData(imagenames, 'probsout')[0]))
 
     return np.vstack(predictions)[:len(labels)], labels, hashes
 
