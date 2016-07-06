@@ -32,7 +32,7 @@ settings = {
     'SOLVER_BASE':'%s/base_network/my_network/base_files/quick_solver_base.prototxt' % experiment_path,
 
     #Path to the folder where we can wait the initial weights in case we want to use some
-    'INITIAL_WEIGHTS':'%s/home/ubuntu/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel' % experiment_path,
+    'INITIAL_WEIGHTS':'home/ubuntu/caffe/models/bvlc_googlenet/bvlc_googlenet.caffemodel',
     'PROTOTXT_READY_PATH': '%s/data/base_network/my_network/ready_files' % experiment_path,
     'PROTOTXT_READY':'%s/data/base_network/my_network/ready_files/%s_ready_network.prototxt' % (experiment_path, experiment_name),
     'SOLVER_READY':'%s/data/base_network/my_network/ready_files/%s_ready_solver.prototxt' % (experiment_path, experiment_name),
