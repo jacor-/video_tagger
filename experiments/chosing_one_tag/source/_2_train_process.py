@@ -76,7 +76,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_1.error > {b}/{a}_train_stage_1.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, a = CLASSIFIER_NAME, b = settings['LOGS_PATH']))
 
 
-    '''
+    
     #########################################################
     ###------------------ 2st stage ----------------------###
     #########################################################
@@ -107,7 +107,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
     os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_2.error > {b}/{a}_train_stage_2.log'.format(a = CLASSIFIER_NAME, SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, b = settings['LOGS_PATH']))
-    '''
+    
 
 if __name__ == '__main__':
     CLASSIFIER_NAME = settings['experiment_name']
