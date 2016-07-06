@@ -2,6 +2,8 @@
 experiment_path = 'experiments/chosing_one_tag'
 experiment_name = 'testing_refactoring'
 settings = {
+    'experiment_name' : experiment_name,
+    'experiment_path' : experiment_path,
 
     'dataset_filename': '%s/base_network/input_data/dataset_mid.csv' % experiment_path,
     'images_path': '/home/ubuntu/uploaded_images/images',
