@@ -24,7 +24,7 @@ settings = {
 			        'crossentropylossintermediate' : 	'%s/base_network/my_network/base_files/output_layers_templates/crossentropylossintermediate.prototxt' % experiment_path,
         		}
 
-    }
+    },
 
     'PROTOTXT_BASE':'%s/base_network/my_network/base_files/googlenetbase.prototxt' % experiment_path,
     'SOLVER_BASE':'%s/base_network/my_network/base_files/quick_solver_base.prototxt' % experiment_path,
