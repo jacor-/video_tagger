@@ -60,7 +60,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
     variables_to_replace = {
-        'ITERS' : '2000', #'2000',
+        'ITERS' : '20', #'2000',
         'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_1' % CLASSIFIER_NAME,
         'MODELTOTRAIN': PROTOTXT_READY
     }
@@ -71,10 +71,12 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     print(SOLVER_READY)
     new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
+
+    print(INITIAL_WEIGHTS)
     os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_1.error > {b}/{a}_train_stage_1.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, a = CLASSIFIER_NAME, b = settings['LOGS_PATH']))
 
 
-
+    '''
     #########################################################
     ###------------------ 2st stage ----------------------###
     #########################################################
@@ -96,7 +98,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
     variables_to_replace = {
-        'ITERS' : '2000',#'5000',
+        'ITERS' : '20',#'5000',
         'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_2' % CLASSIFIER_NAME,
         'MODELTOTRAIN': PROTOTXT_READY
     }
@@ -105,8 +107,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
     os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_2.error > {b}/{a}_train_stage_2.log'.format(a = CLASSIFIER_NAME, SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, b = settings['LOGS_PATH']))
-
-
+    '''
 
 if __name__ == '__main__':
     CLASSIFIER_NAME = settings['experiment_name']
