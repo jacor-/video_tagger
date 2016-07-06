@@ -27,13 +27,13 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     SOLVER_BASE=settings['SOLVER_BASE']
 
     #Path to the folder where we can wait the initial weights in case we want to use some
-    INITIAL_WEIGHTS=settings['SOLVER_BASE']
+    INITIAL_WEIGHTS=settings['INITIAL_WEIGHTS']
 
-    PROTOTXT_READY=settings['SOLVER_BASE']
-    SOLVER_READY=settings['SOLVER_BASE']
+    PROTOTXT_READY=settings['PROTOTXT_READY']
+    SOLVER_READY=settings['SOLVER_READY']
 
     #Path where we will save the snapshots which are going to be produced when training the network
-    SNAPSHOT_PREFIX=settings['SOLVER_BASE']
+    SNAPSHOT_PREFIX=settings['SNAPSHOT_PREFIX']
 
 
 
