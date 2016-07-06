@@ -46,7 +46,7 @@ if __name__ == '__main__':
     #### VARIABLES
 
     ## These variables should be hardcoded
-    CLASSIFIER_NAME = settings.experiment_name
+    CLASSIFIER_NAME = settings['experiment_name']
     OUTPUT_CLASSES = _aux_getNumberOfCasses("experiments/chosing_one_tag/data/files/filtered_train.txt")
     model_file = _aux_getSnapshotToBeused(CLASSIFIER_NAME)
     print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
