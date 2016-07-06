@@ -24,7 +24,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
 
     #Paths where we can find the original files
     PROTOTXT_BASE=settings['PROTOTXT_BASE']
-    SOLVER_BASE=]settings['SOLVER_BASE']
+    SOLVER_BASE=settings['SOLVER_BASE']
 
     #Path to the folder where we can wait the initial weights in case we want to use some
     INITIAL_WEIGHTS=settings['SOLVER_BASE']

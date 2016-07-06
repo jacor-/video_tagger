@@ -1,6 +1,6 @@
 
 experiment_path = 'experiments/chosing_one_tag'
-experiment_name = 'midtag'
+experiment_name = 'testing_refactoring'
 settings = {
 
     'dataset_filename': '%s/base_network/input_data/dataset_mid.csv' % experiment_path,
