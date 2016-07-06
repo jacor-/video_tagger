@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     ## These variables should be hardcoded
     CLASSIFIER_NAME = settings['experiment_name']
-    OUTPUT_CLASSES = _aux_getNumberOfCasses("experiments/chosing_one_tag/data/files/filtered_train.txt")
+    OUTPUT_CLASSES = _aux_getNumberOfCasses("experiments/chosing_one_tag/data/files/train.txt")
     model_file = _aux_getSnapshotToBeused(CLASSIFIER_NAME)
     print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'], settings['map_template2file']['TEST'])
 
     t1 = time.time()
-    predictions_val, labels_val, hashes_val = predictFromFile(net, "experiments/chosing_one_tag/data/files/filtered_val.txt")
+    predictions_val, labels_val, hashes_val = predictFromFile(net, "experiments/chosing_one_tag/data/files/val.txt")
     print(time.time()-t1)
     print("Final accuracy: " + str(getAccuracy(predictions_val, labels_val)))
     np.save('experiments/chosing_one_tag/data/raw_results/val_results.npy', predictions_val)
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     np.save('experiments/chosing_one_tag/data/raw_results/val_label.npy', labels_val)
 
     t1 = time.time()
-    predictions_train, labels_train, hashes_train = predictFromFile(net, "experiments/chosing_one_tag/data/files/filtered_train.txt")
+    predictions_train, labels_train, hashes_train = predictFromFile(net, "experiments/chosing_one_tag/data/files/train.txt")
     print(time.time()-t1)
     print("Final accuracy: " + str(getAccuracy(predictions_train, labels_train)))
     np.save('experiments/chosing_one_tag/data/raw_results/train_results.npy', predictions_train)
