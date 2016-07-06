@@ -1,5 +1,6 @@
 import subprocess
 import os
+from settings import settings
 
 
 def _getPredefinedVariables_(CLASSIFIER_NAME):
