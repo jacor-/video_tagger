@@ -106,7 +106,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
 
 
 if __name__ == '__main__':
-    CLASSIFIER_NAME = 'midtag'
+    CLASSIFIER_NAME = settings.experiment_name
 
     #Path to the validation and train filenames
     VAL_FILENAME="./data/files/filtered_val.txt"
