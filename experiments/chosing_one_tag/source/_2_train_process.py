@@ -112,8 +112,8 @@ if __name__ == '__main__':
     CLASSIFIER_NAME = settings['experiment_name']
 
     #Path to the validation and train filenames
-    VAL_FILENAME="experiments/chosing_one_tag//data/files/filtered_val.txt"
-    TRAIN_FILENAME="experiments/chosing_one_tag//data/files/filtered_train.txt"
+    VAL_FILENAME="experiments/chosing_one_tag/data/files/filtered_val.txt"
+    TRAIN_FILENAME="experiments/chosing_one_tag/data/files/filtered_train.txt"
 
     command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
     OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))

@@ -44,7 +44,7 @@ f.close()
 f = open(output_file_test_aux, 'w')
 for i in df_valid.index:
     hash, labels, video = df_valid.ix[i]
-    f.write(settings['images_path'] + "7" + hash + ".jpg," + str(' '.join(labels[1:-1].lstrip().rstrip().split(None))) + "," + str(video) + "\n")
+    f.write(settings['images_path'] + "/" + hash + ".jpg," + str(' '.join(labels[1:-1].lstrip().rstrip().split(None))) + "," + str(video) + "\n")
 f.close()
 
 ####
