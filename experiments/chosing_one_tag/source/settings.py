@@ -4,7 +4,7 @@ experiment_name = 'midtag'
 settings = {
 
     'dataset_filename': '%s/base_network/input_data/dataset_mid.csv' % experiment_path,
-    'images_path': 'images',
+    'images_path': '/home/ubuntu/uploaded_images/images',
     'minimum_samples_per_tag': 30,
 
     'output_file_train' : '%s/data/files/train.txt'  % experiment_path, ## DO NOT MODIFY THIS ONE
