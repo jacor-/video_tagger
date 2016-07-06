@@ -74,3 +74,4 @@ if __name__ == '__main__':
     np.save('experiments/chosing_one_tag/data/raw_results/train_hashes.npy', hashes_train)
     np.save('experiments/chosing_one_tag/data/raw_results/train_label.npy', labels_train)
 
+ 
