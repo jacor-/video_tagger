@@ -189,15 +189,6 @@ class BatchAdvancer():
         self.batch_size = params['batch_size'] # we need to store this as a local variable.
 
 
-        ### PENDING STEPS:
-        ## 1 - Load both files
-        ## 2 - Store video IDs. This list is the one which will be shuffled for randominzation and data augmentation
-        ## 3 - For each one of the selected videos in the specified rder after shufling, getting it frames and populate the data file
-        ## 4 - The labels must be taken from the video itself. Nothing to do with the frames
-
-
-        self.dataset = [line.rstrip('\n').split(",") for line in open(self.data_filename)]
-
         self._cur = 0 # current image
         self.transformer = SimpleTransformer() #this class does some simple data-manipulations
 
