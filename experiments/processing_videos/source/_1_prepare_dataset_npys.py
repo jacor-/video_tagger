@@ -59,11 +59,11 @@ test_samples = available_vids[indexs[samples_in_train:]]
 print(train_samples[:10])
 f = open(settings['path_for_files'] + "/" + settings['output_file_train'], 'w')
 for sample in train_samples:
-	f.write(sample + "\n")
+	f.write(str(sample) + "\n")
 f.close()
 f = open(settings['path_for_files'] + "/" + settings['output_file_test'], 'w')
 for sample in test_samples:
-	f.write(sample + "\n")
+	f.write(str(sample) + "\n")
 f.close()
 
 
