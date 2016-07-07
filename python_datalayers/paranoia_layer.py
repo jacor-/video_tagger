@@ -41,7 +41,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
         #We will use e_xi as an auxiliar space. The mask will be used to perform vectorized operation on the output.
         self.e_xi = np.zeros(bottom[0].shape)
-        self.mask = no.zeros((self.videos_per_batch, self.batch_size))
+        self.mask = np.zeros((self.videos_per_batch, self.batch_size))
         for ivid in range(self.videos_per_batch):
             for iframe in range(self.frames_per_video):
                 self.mask[ivid][ivid*self.frames_per_video+iframe] = 1
