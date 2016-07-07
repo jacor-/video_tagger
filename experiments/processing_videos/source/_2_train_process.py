@@ -57,7 +57,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
         'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
         'IMAGEPATH': settings['images_path'],
         'FRAMESPERVIDEO': str(settings['frames_per_video']), 
-        'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dateset'],
+        'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dataset'],
         'BATCHSIZE': str(settings['batch_size'])
     }
 
@@ -98,7 +98,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
         'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
         'IMAGEPATH': settings['images_path'],
         'FRAMESPERVIDEO': settings['frames_per_video'], 
-        'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dateset'],
+        'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dataset'],
         'BATCHSIZE': settings['batch_size']
     }
 
