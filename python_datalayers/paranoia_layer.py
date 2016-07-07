@@ -46,7 +46,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
             for iframe in range(self.frames_per_video):
                 self.mask[ivid][ivid*self.frames_per_video+iframe] = 1
 
-        top[0].reshape((self.videos_per_batch, bottom[0].shape[1]))
+        top[0].reshape([self.videos_per_batch, bottom[0].shape[1]])
 
     def reshape(self, bottom, top):
         # We only reshape once because the input has constant shape
