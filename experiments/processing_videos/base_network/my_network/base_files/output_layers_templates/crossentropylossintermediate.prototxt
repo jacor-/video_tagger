@@ -13,7 +13,7 @@ layer {
 
 layer {
   name: "<<var#name>>/loss"
-  type: "SigmoidCrossEntropyLossLayer"
+  type: "ReluCrossEntropyLoss"
   bottom: "smoothmax_<<var#name>>"
   bottom: "label"
   propagate_down: true
