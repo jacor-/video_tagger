@@ -15,7 +15,6 @@ class PrototxtTemplate(object):
                 template_name = v[1]
                 args = {}
                 if len(v) >= 2:
-                    print(v)
                     for i in range(2,len(v)):
                         args[v[i].split(":")[0]] = v[i].split(":")[1]
 
@@ -51,8 +50,6 @@ class PrototxtTemplate(object):
 
     def getString(self, fields_to_replace):
         aux = str(self.template)
-        print("-----------")
-        print(fields_to_replace)
         for string_to_replace in fields_to_replace:
             aux = aux.replace('<<var#'+string_to_replace+'>>', fields_to_replace[string_to_replace])
         return aux
