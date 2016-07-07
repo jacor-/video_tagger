@@ -21,7 +21,7 @@ import sys
 from settings import settings
 
 
-def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME, map_template2file):
+def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
 
     #Paths where we can find the original files
     PROTOTXT_BASE=settings['PROTOTXT_BASE']
@@ -53,11 +53,11 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
         'LRMULTLASTLAYER' : '1',
         'DEMULTLASTLAYER' : '2',
         'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
-        'TRAINSAMPLESFILE': TRAIN_FILENAME,
-        'TESTSAMPLESFILE': VAL_FILENAME,
+        'TRAINSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_train'],
+        'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
         'IMAGEPATH': settings['images_path'],
         'FRAMESPERVIDEO': str(settings['frames_per_video']), 
-        'DATASETFILE': settings['dict_dateset'],
+        'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dateset'],
         'BATCHSIZE': str(settings['batch_size'])
     }
 
@@ -94,11 +94,11 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
         'LRMULTLASTLAYER' : '1',
         'DEMULTLASTLAYER' : '0.5',
         'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
-        'TRAINSAMPLESFILE': TRAIN_FILENAME,
-        'TESTSAMPLESFILE': VAL_FILENAME,
+        'TRAINSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_train'],
+        'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
         'IMAGEPATH': settings['images_path'],
         'FRAMESPERVIDEO': settings['frames_per_video'], 
-        'DATASETFILE': settings['dict_dateset'],
+        'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dateset'],
         'BATCHSIZE': settings['batch_size']
     }
 
@@ -121,10 +121,8 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
 if __name__ == '__main__':
     #Path to the validation and train filenames
     CLASSIFIER_NAME = settings['experiment_name']
-    VAL_FILENAME="%s/%s" % (settings['path_for_files'], settings['output_file_test'])
-    TRAIN_FILENAME="%s/%s" % (settings['path_for_files'], settings['output_file_train'])
 
     OUTPUT_CLASSES= len(np.load("%s/%s" % (settings['path_for_files'], settings['processed_labels_2_original_label'])))
 
     print("Training network with name " + CLASSIFIER_NAME + " which has " + str(OUTPUT_CLASSES) + ' classes')
-    trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME, settings['map_template2file']['TRAIN'])
+    trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, settings['map_template2file']['TRAIN'])
