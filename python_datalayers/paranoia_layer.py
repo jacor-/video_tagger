@@ -180,7 +180,7 @@ class BatchAdvancer():
         self.frames_per_video = params['frames_per_video']
         self.videos_per_batch = self.batch_size / self.frames_per_video
 
-        self.dataset = np.load(params['dataset_file'])
+        self.dataset = np.load(params['dataset_file']).item()
         self.video_list = [line[:-1] for line in open(params['samples_file']).readlines() if len(line) > 1]
 
 
