@@ -3,7 +3,7 @@ from sklearn.preprocessing import LabelEncoder
 import pandas as pd 
 import numpy as np
 
-
+print(settings['path_for_files'])
 minimum_samples_per_tag = 30
 
 df = pd.read_csv(settings['dataset_filename'], sep = ';')
@@ -57,3 +57,4 @@ train_samples = available_vids[indexs[:samples_in_train]]
 test_samples = available_vids[indexs[samples_in_train:]]
 np.save(settings['path_for_files'] + "/" + settings['output_file_train'], train_samples)
 np.save(settings['path_for_files'] + "/" + settings['output_file_test'], test_samples)
+
