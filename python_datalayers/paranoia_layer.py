@@ -46,6 +46,9 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
         top[0].reshape(self.videos_per_batch, bottom[0].data.shape[1])
 
+        self.diff = np.zeros_like(bottom[0].data, dtype=np.float32)
+
+
     def reshape(self, bottom, top):
         # We only reshape once because the input has constant shape
         pass
