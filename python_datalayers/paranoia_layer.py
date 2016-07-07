@@ -214,6 +214,8 @@ class BatchAdvancer():
             for label in labels:
                 # in the multilabel problem we don't care how MANY instances there are of each class. Only if they are present.
                 multilabel[label] = 1 # The "-1" is b/c we are not interested in the background class.
+            # Store in a result list.
+            self.result['label'].append(multilabel)
             
             for i_frame in range(self.frames_per_video):
                 imagepath = self.image_path + "/" + video_data['images'][i_frame] + ".jpg"
@@ -227,8 +229,6 @@ class BatchAdvancer():
                 im = im[:, ::flip, :]
                 self.result['data'].append(self.transformer.preprocess(im))
 
-                # Store in a result list.
-                self.result['label'].append(multilabel)
 
             self._cur += 1
 
