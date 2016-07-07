@@ -126,9 +126,7 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
         top[0].reshape(self.batch_size, 3, params['im_shape'][0], params['im_shape'][1]) # since we use a fixed input image size, we can shape the data layer once. Else, we'd have to do it in the reshape call.
         top[1].reshape(self.videos_per_batch, self.N_labels)
 
-        print "VilynxDatabaseAsync initialized for split: {}, with bs:{}, im_shape:{}.".format(params['split'], params['batch_size'], params['im_shape'])
-        print([self.batch_size, 3, params['im_shape'][0], params['im_shape'][1]])
-        print([self.videos_per_batch, self.N_labels])
+        print "VilynxDatabaseAsync initialized for split: {}, with batch size:{}, im_shape:{}.".format(params['split'], params['batch_size'], params['im_shape'])
 
     def reshape(self, bottom, top):
         """ no need to reshape each time sine the input is fixed size (rows and columns) """
@@ -144,7 +142,10 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
             for i in range(self.batch_size):
                 aux = self.thread_result
                 #print(name)
-                print(aux[name].shape)
+                print(aux[name].shape[0])
+                print(aux[name].shape[1])
+                print(aux[name].shape[2])
+                print(aux[name].shape[3])
                 top[top_index].data[i, ...] = aux[name][i] #Copy the already-prepared data to caffe.
 
         self.dispatch_worker() # let's go again while the GPU process this batch.
