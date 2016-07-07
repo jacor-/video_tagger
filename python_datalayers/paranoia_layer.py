@@ -32,21 +32,21 @@ class SmoothMaxVideoLayer(caffe.Layer):
         assert 'batch_size' in params.keys(), 'Params must include batch size.'
         assert 'frames_per_video' in params.keys(), 'Params must include frames_per_video.'
 
-        self.BATCH_SIZE = int(params['batch_size'])
-        self.FRAMES_PER_VIDEO = int(params['frames_per_video'])
-        self.VIDEOS_PER_BATCH = self.BATCH_SIZE / self.FRAMES_PER_VIDEO
+        self.batch_size = int(params['batch_size'])
+        self.frames_per_video = int(params['frames_per_video'])
+        self.videos_per_batch = self.batch_size / self.frames_per_video
 
         print("Input shape: ")
         print(bottom[0].shape)
 
         #We will use e_xi as an auxiliar space. The mask will be used to perform vectorized operation on the output.
         self.e_xi = np.zeros(bottom[0].shape)
-        self.mask = no.zeros((self.VIDEOS_PER_BATCH, self.BATCH_SIZE))
-        for ivid in range(self.VIDEOS_PER_BATCH):
-            for iframe in range(self.FRAMES_PER_VIDEO):
-                self.mask[ivid][ivid*self.FRAMES_PER_VIDEO+iframe] = 1
+        self.mask = no.zeros((self.videos_per_batch, self.batch_size))
+        for ivid in range(self.videos_per_batch):
+            for iframe in range(self.frames_per_video):
+                self.mask[ivid][ivid*self.frames_per_video+iframe] = 1
 
-        top[0].reshape((self.VIDEOS_PER_BATCH, bottom[0].shape[1]))
+        top[0].reshape((self.videos_per_batch, bottom[0].shape[1]))
 
     def reshape(self, bottom, top):
         # We only reshape once because the input has constant shape
