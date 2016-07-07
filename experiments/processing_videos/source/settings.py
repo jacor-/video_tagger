@@ -26,7 +26,7 @@ settings = {
 		            'crossentropylossintermediate' :    '%s/base_network/my_network/base_files/output_layers_templates/empty_template.prototxt' % experiment_path
 		        },
         'TRAIN': {
-        			'inputprototxt' : 					'%s/base_network/my_network/base_files/input_layers_base/crossentropylossintermediate.prototxt' % experiment_path,
+        			'inputprototxt' : 					'%s/base_network/my_network/base_files/input_layers_base/train_layers_base.prototxt' % experiment_path,
 			        'evaltrainstage' : 					'%s/base_network/my_network/base_files/output_layers_templates/final_output_base.prototxt' % experiment_path,
 			        'crossentropylossintermediate' : 	'%s/base_network/my_network/base_files/output_layers_templates/crossentropylossintermediate.prototxt' % experiment_path,
         		}
