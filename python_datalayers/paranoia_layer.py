@@ -142,10 +142,12 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
             for i in range(self.batch_size):
                 aux = self.thread_result
                 #print(name)
-                print(aux[name].shape[0])
-                print(aux[name].shape[1])
-                print(aux[name].shape[2])
-                print(aux[name].shape[3])
+                print("---")
+                print(len(aux[name]))
+                print(aux[name][0])
+                print(aux[name][1])
+                print(aux[name][2])
+                print(aux[name][3])
                 top[top_index].data[i, ...] = aux[name][i] #Copy the already-prepared data to caffe.
 
         self.dispatch_worker() # let's go again while the GPU process this batch.
