@@ -16,7 +16,7 @@ settings = {
     'path_for_files' : '%s/data/files'  % experiment_path, ## DO NOT MODIFY THIS ONE
     'output_file_train' : '%s_train.txt' % experiment_name,
     'output_file_test' : '%s_val.txt' % experiment_name, ## DO NOT MODIFY THIS ONE
-    'dict_dateset': '%s_dict_dataset.csv' % experiment_name, ## DO NOT MODIFY THIS ONE
+    'dict_dataset': '%s_dict_dataset.csv' % experiment_name, ## DO NOT MODIFY THIS ONE
     'processed_labels_2_original_label' : '%s_classes.npy' % experiment_name, ## DO NOT MODIFY THIS ONE
 
     'map_template2file': {
