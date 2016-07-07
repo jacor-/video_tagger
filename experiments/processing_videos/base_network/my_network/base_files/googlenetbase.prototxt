@@ -2305,6 +2305,13 @@ layer {
     }
   }
 }
+layer {
+  type: "Softmax"
+  name: "probsout"
+  bottom: "loss3/classifier_new"
+  top: "probsout"
+  propagate_down: false
+}
 
 
-<<template#evaltrainstage#bottomlayer:loss3/classifier_new#outprobs:loss3/classifier_new>>
+<<template#evaltrainstage#bottomlayer:loss3/classifier_new#outprobs:probsout>>
