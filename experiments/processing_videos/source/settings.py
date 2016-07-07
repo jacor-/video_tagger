@@ -1,5 +1,5 @@
 
-experiment_path = 'experiments/chosing_one_tag'
+experiment_path = 'experiments/processing_videos'
 experiment_name = 'testing_refactoring'
 settings = {
     'experiment_name' : experiment_name,
