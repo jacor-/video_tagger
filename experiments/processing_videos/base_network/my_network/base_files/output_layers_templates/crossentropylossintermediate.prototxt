@@ -1,0 +1,8 @@
+layer {
+  name: "<<var#name>>"
+  type: "SigmoidCrossEntropyLoss"
+  bottom: "<<var#bottomlayer>>"
+  bottom: "label"
+  top: "<<var#name>>"
+  loss_weight: <<var#lossweight>>
+}
