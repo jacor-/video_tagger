@@ -176,9 +176,6 @@ class BatchAdvancer():
         self.N_labels = params['N_labels']
         self.image_path = params['image_path']
 
-        self.video_to_label_filename = params['video_to_label_filename']
-        self.video_to_frames_filename = params['video_to_frames_filename']
-
 
         self.frames_per_video = params['frames_per_video']
         self.videos_per_batch = self.batch_size / self.frames_per_video
