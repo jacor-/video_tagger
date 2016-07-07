@@ -1,4 +1,4 @@
-cd experiments/chosing_one_tag;
+cd experiments/processing_videos;
 
 mkdir -p data;
 mkdir -p data/logs;
