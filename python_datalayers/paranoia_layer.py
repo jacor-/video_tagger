@@ -127,8 +127,8 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
         top[1].reshape(self.videos_per_batch, self.N_labels)
 
         print "VilynxDatabaseAsync initialized for split: {}, with bs:{}, im_shape:{}.".format(params['split'], params['batch_size'], params['im_shape'])
-        print(top[0].shape)
-        print(top[1].shape)
+        print([self.batch_size, 3, params['im_shape'][0], params['im_shape'][1]])
+        print([self.videos_per_batch, self.N_labels])
 
     def reshape(self, bottom, top):
         """ no need to reshape each time sine the input is fixed size (rows and columns) """
