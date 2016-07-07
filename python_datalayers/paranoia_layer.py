@@ -106,7 +106,7 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
 
         self.batch_size = params['batch_size']
         self.frames_per_video = params['frames_per_video']
-        self.videos_per_batch = self.BATCH_SIZE / self.frames_per_video
+        self.videos_per_batch = self.batch_size / self.frames_per_video
 
         # store input as class variables
         self.N_labels = params['N_labels']
