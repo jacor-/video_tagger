@@ -140,8 +140,6 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
             for i in range(self.batch_size):
                 aux = self.thread_result
                 #print(name)
-                print("---")
-                print(len(aux[name]))
                 top[top_index].data[i, ...] = aux[name][i] #Copy the already-prepared data to caffe.
 
         self.dispatch_worker() # let's go again while the GPU process this batch.
@@ -197,9 +195,7 @@ class BatchAdvancer():
         """
         self.result['data'] = []
         self.result['label'] = []
-        print("a")
         for itt in range(self.videos_per_batch):
-            print(" - a1")
             # Did we finish an epoch?
             if self._cur == len(self.video_list):
                 self._cur = 0
@@ -217,15 +213,11 @@ class BatchAdvancer():
                 multilabel[label] = 1 # The "-1" is b/c we are not interested in the background class.
             
             for i_frame in range(self.frames_per_video):
-                print(self.frames_per_video)
-                print(" --  d1")
                 imagepath = self.image_path + "/" + video_data['images'][i_frame] + ".jpg"
-                print(imagepath)
                 #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
                 #print('Loading image ' + str(index[0]))
                 im = np.asarray(Image.open(imagepath)) # load image
                 im = scipy.misc.imresize(im, self.im_shape) # resize
-                print(" --  d2")
                 #print('oaded image ' + str(index[0]))
                 # do a simple horizontal flip as data augmentation
                 flip = np.random.choice(2)*2-1
@@ -235,9 +227,7 @@ class BatchAdvancer():
                 # Store in a result list.
                 self.result['label'].append(multilabel)
 
-            print(" - a2")
             self._cur += 1
-        print("b")
 
 
 
