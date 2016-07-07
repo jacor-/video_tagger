@@ -97,10 +97,11 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
         # do some simple checks that we have the parameters we need.
         assert 'batch_size' in params.keys(), 'Params must include batch size.'
         assert 'split' in params.keys(), 'Params must include split (train, val, or test).'
-        assert 'video_to_label_filename' in params.keys(), 'Params must include data_filename.'
-        assert 'video_to_frames_filename' in params.keys(), 'Params must include data_filename.'
+        assert 'dataset_file' in params.keys(), 'Params must include data_filename.'
+        assert 'samples_file' in params.keys(), 'Params must include data_filename.'
         assert 'im_shape' in params.keys(), 'Params must include im_shape.'
-        assert 'N_labels' in params.keys(), 'Params must include the total number of labels considered'
+        assert 'N_labels' in params.keys(), 'Params must include the total number of considered labels'
+        assert 'image_path' in params.keys(), 'Params must include the image path'
         assert 'frames_per_video' in params.keys(), 'Params must include frames_per_video.'
 
         self.BATCH_SIZE = params['batch_size']
@@ -116,6 +117,9 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
         self.thread = None
         self.batch_advancer = BatchAdvancer(self.thread_result, params)
         self.dispatch_worker() # Let it start fetching data right away.
+
+        # """ We check that the number of frames fits in the batch
+        assert np.mod(self.batch_size, self.frames_per_video) == 0, "Batch size must be divisible by the number of frames per video"
 
         # === reshape tops ===
         # --> data will have size BATCH. It will be then projected into VIDEOS_PER_BATCH space in the last layer (SmoothMax)
@@ -168,11 +172,24 @@ class BatchAdvancer():
 
         self.batch_size = params['batch_size']
         self.im_shape = params['im_shape']
-        self.data_filename = params['data_filename']
         self.im_shape = params['im_shape']
         self.N_labels = params['N_labels']
+        self.image_path = params['image_path']
+
         self.video_to_label_filename = params['video_to_label_filename']
         self.video_to_frames_filename = params['video_to_frames_filename']
+
+
+        self.frames_per_video = params['frames_per_video']
+        self.videos_per_batch = self.batch_size / self.frames_per_video
+
+        self.dataset = np.load(params['dataset_file'])
+        self.video_list = [line[:-1] for line in open(params['samples_file']).readlines() if len(line) > 1]
+
+
+        # store input as class variables
+        self.N_labels = params['N_labels']
+        self.batch_size = params['batch_size'] # we need to store this as a local variable.
 
 
         ### PENDING STEPS:
@@ -195,37 +212,41 @@ class BatchAdvancer():
         """
         self.result['data'] = []
         self.result['label'] = []
-        for itt in range(self.batch_size):
+        for itt in range(self.videos_per_batch):
 
             # Did we finish an epoch?
-            if self._cur == len(self.dataset):
+            if self._cur == len(self.video_list):
                 self._cur = 0
-                shuffle(self.dataset)
+                shuffle(self.video_list)
 
             # Load an image
-            index = self.dataset[self._cur] # Get the image index
-
-
-            #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
-            #print('Loading image ' + str(index[0]))
-            im = np.asarray(Image.open(index[0])) # load image
-            im = scipy.misc.imresize(im, self.im_shape) # resize
-            #print('oaded image ' + str(index[0]))
-            # do a simple horizontal flip as data augmentation
-            flip = np.random.choice(2)*2-1
-            im = im[:, ::flip, :]
-
+            video_data = self.dataset[self.video_list[self._cur]] # Get the image index
 
 
             # Load and prepare ground truth
+            labels = video_data['labels']
             multilabel = np.zeros(self.N_labels).astype(np.float32)
-            for label in map(int, index[1].split(" ")):
+            for label in labels:
                 # in the multilabel problem we don't care how MANY instances there are of each class. Only if they are present.
                 multilabel[label] = 1 # The "-1" is b/c we are not interested in the background class.
+            
+            for i_frame in range(self.frames_per_video):
+                imagepath = self.image_path + "/" + video_data['images'][i_frame]
 
-            # Store in a result list.
-            self.result['data'].append(self.transformer.preprocess(im))
-            self.result['label'].append(multilabel)
+                #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
+                #print('Loading image ' + str(index[0]))
+                im = np.asarray(Image.open(imagepath)) # load image
+                im = scipy.misc.imresize(im, self.im_shape) # resize
+                #print('oaded image ' + str(index[0]))
+                # do a simple horizontal flip as data augmentation
+                flip = np.random.choice(2)*2-1
+                im = im[:, ::flip, :]
+                self.result['data'].append(self.transformer.preprocess(im))
+
+                # Store in a result list.
+                self.result['label'].append(multilabel)
+
+            
             self._cur += 1
 
 

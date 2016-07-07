@@ -41,7 +41,7 @@ df_dataset = pd.merge(vid_tag, frames_per_video_sorted, on = 'vid').set_index('v
 dataset = {}
 for vid in df_dataset.index.values:
 	now_data = df_dataset.ix[vid]
-	dataset[vid] = {'labels': now_data['labels'], 'images': now_data['hash']}
+	dataset[str(vid)] = {'labels': now_data['labels'], 'images': now_data['hash']}
 
 np.save(settings['path_for_files'] + "/" + settings['dict_dateset'], dataset)
 np.save(settings['path_for_files'] + "/" + settings['processed_labels_2_original_label'], le.classes_)

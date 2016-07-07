@@ -8,9 +8,9 @@ layer {
     phase: TRAIN
   }
   python_param {
-    module: 'multilabel_datalayer'
-    layer: 'VilynxDatabaseAsync'
-    param_str: '{"N_labels": <<var#OUTPUTNEURONS>>, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "<<var#TRAINFILENAME>>", "split": "TRAIN"}'
+    module: 'paranoia_layer'
+    layer: 'VilynxDatabaseVideosAsync'
+    param_str: '{"N_labels": <<var#OUTPUTNEURONS>>, "batch_size": <<var#BATCHSIZE>>, "im_shape": (224,224), "split": "TRAIN", "image_path": "<<var#IMAGEPATH>>", "frames_per_video": "<<var#FRAMESPERVIDEO>>", "dataset_file": "<<var#DATASETFILE>>", "samples_file": "<<var#TRAINSAMPLESFILE>>"}'
   }
 }
 
@@ -23,9 +23,9 @@ layer {
     phase: TEST
   }
   python_param {
-    module: 'multilabel_datalayer'
-    layer: 'VilynxDatabaseAsync'
-    param_str: '{"N_labels": <<var#OUTPUTNEURONS>>, "batch_size" : 125, "im_shape" : (224,224), "data_filename" : "<<var#VALFILENAME>>", "split": "TEST"}'
+    module: 'paranoia_layer'
+    layer: 'VilynxDatabaseVideosAsync'
+    param_str: '{"N_labels": <<var#OUTPUTNEURONS>>, "batch_size": <<var#BATCHSIZE>>, "im_shape": (224,224), "split": "TEST", "image_path": "<<var#IMAGEPATH>>", "frames_per_video": "<<var#FRAMESPERVIDEO>>", "dataset_file": "<<var#DATASETFILE>>", "samples_file": "<<var#TESTSAMPLESFILE>>"}'
   }
 }
 

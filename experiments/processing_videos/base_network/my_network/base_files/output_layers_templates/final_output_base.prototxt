@@ -1,53 +1,24 @@
+
 layer {
   type: "Python"
-  name: "labelmodifier"
+  name: "smoothmax_last_layer"
   bottom: "<<var#bottomlayer>>"
-  bottom: "label"
-  top: "labelmodifier"
+  top: "smoothmax_last_layer"
   python_param {
-    module: 'multilabel_to_monolabel_attention_layer'
-    layer: 'MultilabelToMonolabelAttentionLayer'
+    module: "paranoia_layer"
+    layer: "SmoothMaxVideoLayer"
+    param_str: '{"batch_size" : <<var#BATCHSIZE>>, "frames_per_video": "<<var#FRAMESPERVIDEO>>"}'
   }
 }
 
 layer {
-  name: "loss3/loss"
-  type: "SoftmaxWithLoss"
-  bottom: "<<var#bottomlayer>>"
-  bottom: "labelmodifier"
+  name: "outprobs/loss"
+  type: "SigmoidCrossEntropyLossLayer"
+  bottom: "smoothmax_last_layer"
+  bottom: "label"
   propagate_down: true
   propagate_down: false
-  top: "loss3/loss3"
+  top: output_network/loss
   loss_weight: 1
 }
-layer {
-  type: "Python"
-  name: "loss_test/loss"
-  bottom: "<<var#outprobs>>"
-  bottom: "label"
-  top: "loss_test/loss"
-  python_param {
-    module: 'multilabel_to_monolabel_attention_layer'
-    layer: 'MonolabelAccuracyOneCorrectAfterSoftmax'
-  }
-  include {
-    phase: TEST
-  }
-}
-layer {
-  type: "Python"
-  name: "loss_test-top-5/loss"
-  bottom: "<<var#outprobs>>"
-  bottom: "label"
-  top: "loss_test-top-5/loss"
-  python_param {
-    module: 'multilabel_to_monolabel_attention_layer'
-    layer: 'MonolabelAccuracyOneCorrectAfterSoftmax_top5'
-  }
-  include {
-    phase: TEST
-  }
-}
-
-
 
