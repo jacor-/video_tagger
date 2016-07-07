@@ -181,7 +181,6 @@ class BatchAdvancer():
         self.videos_per_batch = self.batch_size / self.frames_per_video
 
         self.dataset = np.load(params['dataset_file'])
-        print(self.dataset)
         self.video_list = [line[:-1] for line in open(params['samples_file']).readlines() if len(line) > 1]
 
 
@@ -193,7 +192,7 @@ class BatchAdvancer():
         self._cur = 0 # current image
         self.transformer = SimpleTransformer() #this class does some simple data-manipulations
 
-        print "BatchAdvancer initialized with {} images".format(len(self.dataset))
+        print("BatchAdvancer initialized with %d images".format(len(self.dataset.keys())))
 
     def __call__(self):
         """
