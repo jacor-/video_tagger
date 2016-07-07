@@ -885,7 +885,7 @@ layer {
     }
   }
 }
-<<template#crossentropylossintermediate#name:loss1/#bottomlayer:loss1/classifier_new#lossweight:0.2>>
+<<template#crossentropylossintermediate#name:loss1#bottomlayer:loss1/classifier_new#lossweight:0.2>>
 
 layer {
   name: "inception_4b/1x1"
@@ -1621,7 +1621,7 @@ layer {
 }
 
 
-<<template#crossentropylossintermediate#name:loss2/#bottomlayer:loss2/classifier_new#lossweight:0.2>>
+<<template#crossentropylossintermediate#name:loss2#bottomlayer:loss2/classifier_new#lossweight:0.2>>
 
 layer {
   name: "inception_4e/1x1"
