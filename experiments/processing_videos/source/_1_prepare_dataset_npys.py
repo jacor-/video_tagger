@@ -43,7 +43,7 @@ for vid in df_dataset.index.values:
 	now_data = df_dataset.ix[vid]
 	dataset[str(vid)] = {'labels': now_data['labels'], 'images': now_data['hash']}
 
-np.save(settings['path_for_files'] + "/" + settings['dict_dateset'], dataset)
+np.save(settings['path_for_files'] + "/" + settings['dict_dataset'], dataset)
 np.save(settings['path_for_files'] + "/" + settings['processed_labels_2_original_label'], le.classes_)
 
 
