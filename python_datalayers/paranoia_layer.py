@@ -104,9 +104,9 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
         assert 'image_path' in params.keys(), 'Params must include the image path'
         assert 'frames_per_video' in params.keys(), 'Params must include frames_per_video.'
 
-        self.BATCH_SIZE = params['batch_size']
-        self.FRAMES_PER_VIDEO = params['frames_per_video']
-        self.VIDEOS_PER_BATCH = self.BATCH_SIZE / self.FRAMES_PER_VIDEO
+        self.batch_size = params['batch_size']
+        self.frames_per_video = params['frames_per_video']
+        self.videos_per_batch = self.BATCH_SIZE / self.frames_per_video
 
         # store input as class variables
         self.N_labels = params['N_labels']
@@ -123,8 +123,8 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
 
         # === reshape tops ===
         # --> data will have size BATCH. It will be then projected into VIDEOS_PER_BATCH space in the last layer (SmoothMax)
-        top[0].reshape(self.BATCH_SIZE, 3, params['im_shape'][0], params['im_shape'][1]) # since we use a fixed input image size, we can shape the data layer once. Else, we'd have to do it in the reshape call.
-        top[1].reshape(self.VIDEOS_PER_BATCH, self.N_labels)
+        top[0].reshape(self.batch_size, 3, params['im_shape'][0], params['im_shape'][1]) # since we use a fixed input image size, we can shape the data layer once. Else, we'd have to do it in the reshape call.
+        top[1].reshape(self.videos_per_batch, self.N_labels)
 
         print "VilynxDatabaseAsync initialized for split: {}, with bs:{}, im_shape:{}.".format(params['split'], params['batch_size'], params['im_shape'])
 
