@@ -36,8 +36,6 @@ class SmoothMaxVideoLayer(caffe.Layer):
         self.frames_per_video = int(params['frames_per_video'])
         self.videos_per_batch = self.batch_size / self.frames_per_video
 
-        print("Input shape: ")
-        print(bottom[0].shape)
 
         #We will use e_xi as an auxiliar space. The mask will be used to perform vectorized operation on the output.
         self.e_xi = np.zeros(bottom[0].shape)
@@ -172,7 +170,6 @@ class BatchAdvancer():
 
         self.batch_size = params['batch_size']
         self.im_shape = params['im_shape']
-        self.im_shape = params['im_shape']
         self.N_labels = params['N_labels']
         self.image_path = params['image_path']
 
@@ -220,13 +217,15 @@ class BatchAdvancer():
                 multilabel[label] = 1 # The "-1" is b/c we are not interested in the background class.
             
             for i_frame in range(self.frames_per_video):
+                print(self.frames_per_video)
                 print(" --  d1")
                 imagepath = self.image_path + "/" + video_data['images'][i_frame]
-
+                print(imagepath)
                 #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
                 #print('Loading image ' + str(index[0]))
                 im = np.asarray(Image.open(imagepath)) # load image
                 im = scipy.misc.imresize(im, self.im_shape) # resize
+                print(" --  d2")
                 #print('oaded image ' + str(index[0]))
                 # do a simple horizontal flip as data augmentation
                 flip = np.random.choice(2)*2-1
