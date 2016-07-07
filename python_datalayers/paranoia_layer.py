@@ -219,7 +219,7 @@ class BatchAdvancer():
             for i_frame in range(self.frames_per_video):
                 print(self.frames_per_video)
                 print(" --  d1")
-                imagepath = self.image_path + "/" + video_data['images'][i_frame]
+                imagepath = self.image_path + "/" + video_data['images'][i_frame] + ".jpg"
                 print(imagepath)
                 #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
                 #print('Loading image ' + str(index[0]))
