@@ -71,7 +71,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
     def backward(self, top, propagate_down, bottom):
         if not propagate_down[0]:
-            continue
+            return
         bottom[i].diff[...] = self.diff
 
 
