@@ -6,7 +6,7 @@ layer {
   top: "label"
   include {
     phase: TRAIN
-  }
+  } 
   python_param {
     module: 'paranoia_layer'
     layer: 'VilynxDatabaseVideosAsync'
