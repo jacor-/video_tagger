@@ -24,7 +24,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
     def setup(self, bottom, top):
         # We only have an input here: the result of processing each frame independently
-        if len(bottom) != 1
+        if len(bottom) != 1:
             raise Exception("We expect only one input.")
 
         params = eval(self.param_str)
