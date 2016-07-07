@@ -56,9 +56,9 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
         'TRAINSAMPLESFILE': TRAIN_FILENAME,
         'TESTSAMPLESFILE': VAL_FILENAME,
         'IMAGEPATH': settings['images_path'],
-        'FRAMESPERVIDEO': settings['frames_per_video'], 
+        'FRAMESPERVIDEO': str(settings['frames_per_video']), 
         'DATASETFILE': settings['dict_dateset'],
-        'BATCHSIZE': settings['batch_size']
+        'BATCHSIZE': str(settings['batch_size'])
     }
 
     new_prototxt = PrototxtTemplate(PROTOTXT_BASE, map_template2file)
