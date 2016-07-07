@@ -32,8 +32,8 @@ class SmoothMaxVideoLayer(caffe.Layer):
         assert 'batch_size' in params.keys(), 'Params must include batch size.'
         assert 'frames_per_video' in params.keys(), 'Params must include frames_per_video.'
 
-        self.BATCH_SIZE = params['batch_size']
-        self.FRAMES_PER_VIDEO = params['frames_per_video']
+        self.BATCH_SIZE = int(params['batch_size'])
+        self.FRAMES_PER_VIDEO = int(params['frames_per_video'])
         self.VIDEOS_PER_BATCH = self.BATCH_SIZE / self.FRAMES_PER_VIDEO
 
         print("Input shape: ")

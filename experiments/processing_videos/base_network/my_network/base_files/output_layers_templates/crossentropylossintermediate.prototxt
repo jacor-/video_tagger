@@ -1,23 +1,23 @@
 
 layer {
   type: "Python"
-  name: smoothmax_"<<var#name>>"
+  name: "smoothmax_<<var#name>>"
   bottom: "<<var#bottomlayer>>"
-  top: smoothmax_"<<var#name>>"
+  top: "smoothmax_<<var#name>>"
   python_param {
     module: "paranoia_layer"
     layer: "SmoothMaxVideoLayer"
-    param_str: '{"batch_size" : <<var#BATCHSIZE>>, "frames_per_video": "<<var#FRAMESPERVIDEO>>"}'
+    param_str: '{"batch_size" : <<var#BATCHSIZE>>, "frames_per_video": <<var#FRAMESPERVIDEO>>}'
   }
 }
 
 layer {
-  name: ""<<var#name>>"/loss"
+  name: "<<var#name>>/loss"
   type: "SoftmaxWithLoss"
-  bottom: smoothmax_"<<var#name>>"
+  bottom: "smoothmax_<<var#name>>"
   bottom: "label"
   propagate_down: true
   propagate_down: false
-  top: smoothmax_"<<var#name>>"/loss
+  top: "<<var#name>>/loss"
   loss_weight: 1
 }
