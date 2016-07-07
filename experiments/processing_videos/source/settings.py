@@ -5,10 +5,11 @@ settings = {
     'experiment_name' : experiment_name,
     'experiment_path' : experiment_path,
 
-    'dataset_filename': '%s/base_network/input_data/dataset_mid.csv' % experiment_path,
+    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags.csv',
     #'images_path': '/home/ubuntu/uploaded_images/images',
     'images_path': '/home/ubuntu/victor_tests/vilynx_bitbucket/vilynx-dl2/data/images',
     'minimum_samples_per_tag': 30,
+    'train_size': 0.75,
 
     'path_for_files' : '%s/data/files'  % experiment_path, ## DO NOT MODIFY THIS ONE
     'output_file_train' : '%s_train.txt' % experiment_name,
