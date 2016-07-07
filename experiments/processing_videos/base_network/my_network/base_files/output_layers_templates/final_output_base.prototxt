@@ -18,7 +18,7 @@ layer {
   bottom: "label"
   propagate_down: true
   propagate_down: false
-  top: output_network/loss
+  top: "output_network/loss"
   loss_weight: 1
 }
 
