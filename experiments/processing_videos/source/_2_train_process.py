@@ -16,6 +16,7 @@ import template_tools
 from template_tools.template_manager1 import PrototxtTemplate
 import subprocess
 import os
+import numpy as np
 import sys
 from settings import settings
 
