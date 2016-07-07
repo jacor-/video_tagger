@@ -3,7 +3,7 @@ from sklearn.preprocessing import LabelEncoder
 import pandas as pd 
 import numpy as np
 
-print(settings['path_for_files'])
+print(" - Files will be saved here: " + settings['path_for_files'])
 minimum_samples_per_tag = 30
 
 df = pd.read_csv(settings['dataset_filename'], sep = ';')
@@ -20,7 +20,7 @@ df2 = pd.DataFrame(columns = ['a'])
 df2['a'] = labels
 aux = df2.a.value_counts()
 accepted_labels = aux[aux > settings['minimum_samples_per_tag']].index.values
-print("The dataset had %d unique labels. The accepted ones where %d" % (len(list(set(labels))), len(accepted_labels)))
+print(" - The dataset had %d unique labels. The accepted ones where %d" % (len(list(set(labels))), len(accepted_labels)))
 
 le = LabelEncoder()
 le.fit(accepted_labels)
@@ -56,7 +56,6 @@ samples_in_train = int(np.floor(settings['train_size']*len(available_vids)))
 train_samples = available_vids[indexs[:samples_in_train]]
 test_samples = available_vids[indexs[samples_in_train:]]
 
-print(train_samples[:10])
 f = open(settings['path_for_files'] + "/" + settings['output_file_train'], 'w')
 for sample in train_samples:
 	f.write(str(sample) + "\n")
