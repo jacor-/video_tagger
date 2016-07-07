@@ -49,12 +49,14 @@ np.save(settings['path_for_files'] + "/" + settings['processed_labels_2_original
 
 
 # Split train and test sets
-available_vids = np.array(dataset.keys())
+available_vids = np.array(list(dataset.keys()))
 indexs = np.arange(len(available_vids))
 np.random.shuffle(indexs)
 samples_in_train = int(np.floor(settings['train_size']*len(available_vids)))
 train_samples = available_vids[indexs[:samples_in_train]]
 test_samples = available_vids[indexs[samples_in_train:]]
+
+print(train_samples[:10])
 f = open(settings['path_for_files'] + "/" + settings['output_file_train'], 'w')
 for sample in train_samples:
 	f.write(sample + "\n")
