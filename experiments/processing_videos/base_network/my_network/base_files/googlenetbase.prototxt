@@ -885,7 +885,7 @@ layer {
     }
   }
 }
-<<template#crossentropylossintermediate#name:loss1/loss#bottomlayer:loss1/classifier_new#lossweight:0.2>>
+<<template#crossentropylossintermediate#name:loss1/#bottomlayer:loss1/classifier_new#lossweight:0.2>>
 
 layer {
   name: "inception_4b/1x1"
@@ -1621,7 +1621,7 @@ layer {
 }
 
 
-<<template#crossentropylossintermediate#name:loss2/loss#bottomlayer:loss2/classifier_new#lossweight:0.2>>
+<<template#crossentropylossintermediate#name:loss2/#bottomlayer:loss2/classifier_new#lossweight:0.2>>
 
 layer {
   name: "inception_4e/1x1"
@@ -2305,13 +2305,6 @@ layer {
     }
   }
 }
-layer {
-  type: "Softmax"
-  name: "probsout"
-  bottom: "loss3/classifier_new"
-  top: "probsout"
-  propagate_down: false
-}
 
 
-<<template#evaltrainstage#bottomlayer:loss3/classifier_new#outprobs:probsout>>
+<<template#evaltrainstage#bottomlayer:loss3/classifier_new>>
