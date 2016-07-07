@@ -38,13 +38,13 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
 
         #We will use e_xi as an auxiliar space. The mask will be used to perform vectorized operation on the output.
-        self.e_xi = np.zeros(bottom[0].shape)
+        self.e_xi = np.zeros(bottom[0].data.shape)
         self.mask = np.zeros((self.videos_per_batch, self.batch_size))
         for ivid in range(self.videos_per_batch):
             for iframe in range(self.frames_per_video):
                 self.mask[ivid][ivid*self.frames_per_video+iframe] = 1
 
-        top[0].reshape(self.videos_per_batch, bottom[0].shape[1])
+        top[0].reshape(self.videos_per_batch, bottom[0].data.shape[1])
 
     def reshape(self, bottom, top):
         # We only reshape once because the input has constant shape
@@ -63,7 +63,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
         top[0].data[...] = output
 
 
-        dif_right = (1 + bottom[0] - np.dot(self.mask.T, output))
+        dif_right = (1 + bottom[0].data - np.dot(self.mask.T, output))
         dif_left = self.e_xi / np.dot(self.mask.T, denominator)## This one should be doable using less memory
         self.diff[...] = dif_right * dif_left
 
