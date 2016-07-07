@@ -3,10 +3,10 @@ from sklearn.preprocessing import LabelEncoder
 import pandas as pd 
 import numpy as np
 
-dataset_filename = 'multi_frame_new_tags.csv'
+
 minimum_samples_per_tag = 30
 
-df = pd.read_csv(dataset_filename, sep = ';')
+df = pd.read_csv(settings['dataset_filename'], sep = ';')
 
 # Sanity check 1
 frames_per_video = df.groupby(['vid']).count()['hash'].unique()
@@ -19,7 +19,7 @@ labels = np.hstack(vid_tag['mid'])
 df2 = pd.DataFrame(columns = ['a'])
 df2['a'] = labels
 aux = df2.a.value_counts()
-accepted_labels = aux[aux > minimum_samples_per_tag].index.values
+accepted_labels = aux[aux > settings['minimum_samples_per_tag']].index.values
 print("The dataset had %d unique labels. The accepted ones where %d" % (len(list(set(labels))), len(accepted_labels)))
 
 le = LabelEncoder()
