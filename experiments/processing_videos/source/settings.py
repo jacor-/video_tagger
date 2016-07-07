@@ -10,8 +10,8 @@ settings = {
     'images_path': '/home/ubuntu/victor_tests/vilynx_bitbucket/vilynx-dl2/data/images',
     'minimum_samples_per_tag': 30,
     'train_size': 0.75,
-    'frames_per_video': 60,
-    'batch_size':240,
+    'frames_per_video': "60",
+    'batch_size': "240",
 
     'path_for_files' : '%s/data/files'  % experiment_path, ## DO NOT MODIFY THIS ONE
     'output_file_train' : '%s_train.txt' % experiment_name,
