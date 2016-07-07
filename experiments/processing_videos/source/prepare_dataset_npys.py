@@ -52,7 +52,7 @@ np.save(settings['path_for_files'] + "/" + settings['processed_labels_2_original
 available_vids = np.array(dataset.keys())
 indexs = np.arange(len(available_vids))
 np.random.shuffle(indexs)
-samples_in_train = int(floor(settings['train_size']*len(available_vids)))
+samples_in_train = int(np.floor(settings['train_size']*len(available_vids)))
 train_samples = available_vids[indexs[:samples_in_train]]
 test_samples = available_vids[indexs[samples_in_train:]]
 np.save(settings['path_for_files'] + "/" + settings['output_file_train'], train_samples)
