@@ -56,8 +56,8 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
     def forward(self, bottom, top):
         # assumes alpha = 1
-        print('----')
-        print(bottom[0].data.max(), bottom[0].data.min(), np.isnan(bottom[0].data).sum())
+        #print('----')
+        #print(bottom[0].data.max(), bottom[0].data.min(), np.isnan(bottom[0].data).sum())
 
         self.e_xi = np.exp(bottom[0].data)
 
@@ -71,9 +71,9 @@ class SmoothMaxVideoLayer(caffe.Layer):
         # in the range of (0.23, 0.77)
         top[0].data[...] = output * 2
 
-        if 'perro_gato_fantasma_in1.npy' not in os.listdir('.'):
-            np.save('perro_gato_fantasma_in1', bottom[0].data)
-            np.save('perro_gato_fantasma_in2', output / 2)
+        #if 'perro_gato_fantasma_in1.npy' not in os.listdir('.'):
+        #    np.save('perro_gato_fantasma_in1', bottom[0].data)
+        #    np.save('perro_gato_fantasma_in2', output / 2)
 
 
         print(output.max(), output.min(), np.isnan(output).sum())
@@ -260,7 +260,20 @@ class BatchAdvancer():
 
 
 
+'''
+batch_size = 240
+videos_per_batch = 4
+frames_per_video = 60
+
+mask = np.zeros((videos_per_batch, batch_size))
+for ivid in range(videos_per_batch):
+    for iframe in range(frames_per_video):
+        mask[ivid][ivid*frames_per_video+iframe] = 1
 
 
+e_xi = np.exp(inp)
 
-
+numerator = np.dot(mask, (inp * e_xi))
+denominator = np.dot(mask, e_xi)
+output = numerator / denominator
+'''
