@@ -31,7 +31,7 @@ dfn['videohash'] = dfn.apply(lambda x: x[0].split("_")[0], axis=1)
 
 df_final = pd.merge(df_valid, dfn, left_on = [0], right_on = ['videohash'])
 df_final = df_final[[0,1,2,3,4]]
-df_final.to_csv(out_dataset_filename, header = False, index = False)
+df_final.to_csv(out_dataset_filename, header = False, index = False, sep = ";")
 
 
 print("Out of the available images:")

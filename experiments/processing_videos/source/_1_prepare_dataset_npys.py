@@ -7,9 +7,6 @@ print(" - Files will be saved here: " + settings['path_for_files'])
 minimum_samples_per_tag = 30
 
 df = pd.read_csv(settings['dataset_filename'], sep = ';', header = None)
-print('perro')
-print(df.columns)
-print(df.head())
 df.columns = ['hash','summary','position','mid','vid']
 # Sanity check 1
 frames_per_video = df.groupby(['vid']).count()['hash'].unique()
