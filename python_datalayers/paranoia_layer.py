@@ -226,8 +226,9 @@ class BatchAdvancer():
                     flip = np.random.choice(2)*2-1
                     im = im[:, ::flip, :]
                 except:
-                    print("Error loading image " + str(imagepath))
+                    print("Error with image " + imagepath)
                     im = np.zeros([self.im_shape[0], self.im_shape[1], 3])
+                print(im.shape)
                 self.result['data'].append(self.transformer.preprocess(im))
 
 
