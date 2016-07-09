@@ -23,7 +23,7 @@ from tools import SimpleTransformer
 class SmoothMaxVideoLayer2(caffe.Layer):
 
     def setup(self, bottom, top):
-        self.scale = 1./10
+        self.scale = 1./1
         # We only have an input here: the result of processing each frame independently
         if len(bottom) != 1:
             raise Exception("We expect only one input.")
