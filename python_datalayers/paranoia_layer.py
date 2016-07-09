@@ -75,6 +75,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
             return
         print("My diff dims " + str(self.diff.shape))
         print("TOP diff dims " + str(top[0].diff.shape))
+        print("Gradient output dims dims " + str((self.diff * np.dot(self.mask.T, top[0].diff)).shape))
 
         bottom[0].diff[...] = self.diff * np.dot(self.mask.T, top[0].diff)
 
