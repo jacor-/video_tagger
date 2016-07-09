@@ -4,8 +4,8 @@ experiment_name = 'testing_refactoring'
 settings = {
     'experiment_name' : experiment_name,
     'experiment_path' : experiment_path,
-
-    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags.csv',
+    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags_filtered_jose.csv',
+    #'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags.csv',
     #'images_path': '/home/ubuntu/uploaded_images/images',
     'images_path': '/home/ubuntu/uploaded_images/images',
     'minimum_samples_per_tag': 30,

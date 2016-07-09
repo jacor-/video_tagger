@@ -76,7 +76,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
         print("My diff dims " + str(self.diff.shape))
         print("TOP diff dims " + str(top[0].diff.shape))
 
-        bottom[0].diff[...] = self.diff
+        bottom[0].diff[...] = self.diff * np.dot(self.mask.T, top[0].diff)
 
 
 
@@ -222,7 +222,7 @@ class BatchAdvancer():
                 multilabel[label] = 1 # The "-1" is b/c we are not interested in the background class.
             # Store in a result list.
             self.result['label'].append(multilabel)
-            
+
             for i_frame in range(self.frames_per_video):
                 imagepath = self.image_path + "/" + video_data['images'][i_frame] + ".jpg"
                 #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
