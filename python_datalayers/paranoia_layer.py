@@ -73,9 +73,6 @@ class SmoothMaxVideoLayer(caffe.Layer):
     def backward(self, top, propagate_down, bottom):
         if not propagate_down[0]:
             return
-        print("My diff dims " + str(self.diff.shape))
-        print("TOP diff dims " + str(top[0].diff.shape))
-        print("Gradient output dims dims " + str((self.diff * np.dot(self.mask.T, top[0].diff)).shape))
 
         bottom[0].diff[...] = self.diff * np.dot(self.mask.T, top[0].diff)
 
@@ -145,10 +142,6 @@ class VilynxDatabaseVideosAsync(caffe.Layer):
 
         for top_index, name in zip(range(len(top)), self.top_names):
             aux = self.thread_result
-            print("-- -- --")
-            print(name)
-            print(len(aux[name]))
-            print(len(aux[name][0]))
             for i in range(len(aux[name])):
                 top[top_index].data[i, ...] = aux[name][i] #Copy the already-prepared data to caffe.
 
@@ -227,13 +220,14 @@ class BatchAdvancer():
             for i_frame in range(self.frames_per_video):
                 imagepath = self.image_path + "/" + video_data['images'][i_frame] + ".jpg"
                 #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
-                #print('Loading image ' + str(index[0]))
-                im = np.asarray(Image.open(imagepath)) # load image
-                im = scipy.misc.imresize(im, self.im_shape) # resize
-                #print('oaded image ' + str(index[0]))
-                # do a simple horizontal flip as data augmentation
-                flip = np.random.choice(2)*2-1
-                im = im[:, ::flip, :]
+                try:
+                    im = np.asarray(Image.open(imagepath)) # load image
+                    im = scipy.misc.imresize(im, self.im_shape) # resize
+                    flip = np.random.choice(2)*2-1
+                    im = im[:, ::flip, :]
+                except:
+                    print("Error loading image " + str(imagepath))
+                    im = np.zeros([3,im_shape[0], im_shape[1]])
                 self.result['data'].append(self.transformer.preprocess(im))
 
 
