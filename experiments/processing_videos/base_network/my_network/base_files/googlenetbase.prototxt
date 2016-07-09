@@ -885,14 +885,8 @@ layer {
     }
   }
 }
-layer {
-  name: "sigmoidpafuera1"
-  type: "Sigmoid"
-  bottom: "loss1/classifier_new"
-  top: "sigmoidpafuera1"
-}
 
-<<template#crossentropylossintermediate#name:loss1#bottomlayer:sigmoidpafuera1#lossweight:0.2>>
+<<template#crossentropylossintermediate#name:loss1#bottomlayer:loss1/classifier_new#lossweight:0.2>>
 
 layer {
   name: "inception_4b/1x1"
@@ -1626,15 +1620,9 @@ layer {
     }
   }
 }
-layer {
-  name: "sigmoidpafuera2"
-  type: "Sigmoid"
-  bottom: "loss2/classifier_new"
-  top: "sigmoidpafuera2"
-}
 
 
-<<template#crossentropylossintermediate#name:loss2#bottomlayer:sigmoidpafuera2#lossweight:0.2>>
+<<template#crossentropylossintermediate#name:loss2#bottomlayer:loss2/classifier_new#lossweight:0.2>>
 
 layer {
   name: "inception_4e/1x1"
@@ -2318,12 +2306,6 @@ layer {
     }
   }
 }
-layer {
-  name: "sigmoidpafuera"
-  type: "Sigmoid"
-  bottom: "loss3/classifier_new"
-  top: "sigmoidpafuera"
-}
 
 
-<<template#evaltrainstage#bottomlayer:sigmoidpafuera>>
+<<template#evaltrainstage#bottomlayer:loss3/classifier_new>>

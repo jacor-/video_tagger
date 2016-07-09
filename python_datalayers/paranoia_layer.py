@@ -23,6 +23,7 @@ from tools import SimpleTransformer
 class SmoothMaxVideoLayer2(caffe.Layer):
 
     def setup(self, bottom, top):
+        self.scale = 1./100
         # We only have an input here: the result of processing each frame independently
         if len(bottom) != 1:
             raise Exception("We expect only one input.")
@@ -59,9 +60,10 @@ class SmoothMaxVideoLayer2(caffe.Layer):
         #print('----')
         #print(bottom[0].data.max(), bottom[0].data.min(), np.isnan(bottom[0].data).sum())
 
-        self.e_xi = np.exp(bottom[0].data)
 
-        output = np.log(np.dot(self.mask, self.e_xi))
+        self.e_xi = np.exp(self.scale*bottom[0].data)
+
+        output = np.log(np.dot(self.mask, self.e_xi))*self.scale
 
         ### COMPUTE THE OUTPUT
 
@@ -79,7 +81,7 @@ class SmoothMaxVideoLayer2(caffe.Layer):
 
 
 
-        gradback = self.e_xi / np.dot(self.mask.T, output)
+        gradback = self.e_xi / np.dot(self.mask.T, output) *self.scale
         self.diff[...] = gradback
 
     def backward(self, top, propagate_down, bottom):
