@@ -72,8 +72,8 @@ class SmoothMaxVideoLayer(caffe.Layer):
         top[0].data[...] = output * 2
 
         if 'perro_gato_fantasma_in1.npy' not in os.listdir('.'):
-            np.save('perro_gato_fantasma_in1', bottom)
-            np.save('perro_gato_fantasma_in2', output)
+            np.save('perro_gato_fantasma_in1', bottom[0].data)
+            np.save('perro_gato_fantasma_in2', output / 2)
 
 
         print(output.max(), output.min(), np.isnan(output).sum())
