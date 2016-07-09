@@ -51,8 +51,6 @@ class PrototxtTemplate(object):
     def getString(self, fields_to_replace):
         aux = str(self.template)
         for string_to_replace in fields_to_replace:
-            print(string_to_replace)
-            print(fields_to_replace[string_to_replace])
             aux = aux.replace('<<var#'+string_to_replace+'>>', fields_to_replace[string_to_replace])
         return aux
 
