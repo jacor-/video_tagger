@@ -22,10 +22,12 @@ minimum_samples_per_tag = settings['minimum_samples_per_tag']
 
 df = pd.read_csv(settings['dataset_filename'], sep = '#', header = None)
 
-df[1] = df[1].map(lambda x: x[1:-1].replace("\"","").split(","))
+df[3] = df[3].map(lambda x: list(set(x[1:-1].replace("\"","").split(","))))
+vid_tag = df.groupby(4).first()
 
+print("Collecting all the labels")
 labels = []
-for val in df[1].values:
+for val in vid_tag[3].values:
     labels += val
 
 df2 = pd.DataFrame(columns = ['a'])
@@ -38,14 +40,14 @@ le = LabelEncoder()
 le.fit(accepted_labels)
 
 
-df['labels'] = df[1].map(lambda x: le.transform([y for y in x if y in accepted_labels]))
+df['labels'] = df[3].map(lambda x: le.transform([y for y in x if y in accepted_labels]))
 
 should_be_empty = [x for x in list(set(np.hstack(df['labels'].values))) if x not in le.transform(accepted_labels)]
 assert len(should_be_empty) == 0, 'Fuck shit!'
 
 df = df[df['labels'].map(len) > 0]
 
-df[[0, 'labels', 2]].to_csv(settings['processed_labels_csv'], index = False, header = False)
+df[[0, 'labels', 4]].to_csv(settings['processed_labels_csv'], index = False, header = False)
 
 
 np.save(settings['processed_labels_2_original_label'], le.classes_)

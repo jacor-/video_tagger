@@ -57,8 +57,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
     def forward(self, bottom, top):
         # assumes alpha = 1
         print(bottom[0].data.max(), bottom[0].data.min(), np.isnan(bottom[0].data).sum())
-        if np.isnan(bottom[0].data).sum() > 0:
-            np.save('perro_gato_fantasma', bottom[0].data)
+
         self.e_xi = np.exp(bottom[0].data)
 
         numerator = np.dot(self.mask, (bottom[0].data * self.e_xi))
@@ -66,7 +65,12 @@ class SmoothMaxVideoLayer(caffe.Layer):
         output = numerator / denominator
         ### COMPUTE THE OUTPUT
 
-        top[0].data[...] = output
+        ## We scale the output by a factor of 2 to be sure the sigmoid in the end has the possibility to reach extreme values
+        # Remember this is the maximum over a sigmoid, so the output will be (0,1). THis means that the next sigmoid will be
+        # in the range of (0.23, 0.77)
+        top[0].data[...] = output * 2
+        print(output.max(), output.min(), np.isnan(output).sum())
+
 
 
         dif_right = (1 + bottom[0].data - np.dot(self.mask.T, output))

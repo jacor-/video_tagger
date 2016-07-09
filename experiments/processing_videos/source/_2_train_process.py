@@ -45,6 +45,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     #########################################################
     ###------------------ 1st stage ----------------------###
     #########################################################
+    '''
     last_snapshot = INITIAL_WEIGHTS
 
     variables_to_replace = {
@@ -86,7 +87,8 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     ###------------------ 2st stage ----------------------###
     #########################################################
     snapshot_prefix_looked_for = '%s_snapshot_stage_1' % CLASSIFIER_NAME
-    last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
+    #last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
+    last_snapshot = INITIAL_WEIGHTS
 
     variables_to_replace = {
         'LRMULTBASENET' : '1',
@@ -116,7 +118,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
     os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_2.error > {b}/{a}_train_stage_2.log'.format(a = CLASSIFIER_NAME, SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, b = settings['LOGS_PATH']))
-    '''
+
 
 if __name__ == '__main__':
     #Path to the validation and train filenames

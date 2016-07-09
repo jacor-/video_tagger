@@ -24,6 +24,8 @@ val_sample = 0.3
 
 
 df = pd.read_csv(settings['processed_labels_csv'], header = None)
+
+
 unique_videos = df[2].unique()
 
 valid_samples = int(unique_videos.shape[0] * 0.3)
