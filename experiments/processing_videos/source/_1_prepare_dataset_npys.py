@@ -13,7 +13,7 @@ frames_per_video = df.groupby(['vid']).count()['hash'].unique()
 assert len(frames_per_video) == 1, 'The number of frames per video is not constant'
 
 vid_tag = df.groupby('vid').first()[['mid']].reset_index()
-vid_tag['mid'] = vid_tag['mid'].map(lambda x: x[1:-1].replace("\"","").split(","))
+vid_tag['mid'] = vid_tag['mid'].map(lambda x: list(set(x[1:-1].replace("\"","").split(","))))
 labels = np.hstack(vid_tag['mid'])
 
 df2 = pd.DataFrame(columns = ['a'])
