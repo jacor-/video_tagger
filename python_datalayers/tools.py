@@ -11,7 +11,7 @@ class SimpleTransformer:
 
     def __init__(self, mean=[128, 128, 128]):
         self.mean = np.array(mean, dtype=np.float32)
-        self.scale = 1.0 / 512
+        self.scale = 1.0 / 1024
 
     def set_mean(self, mean):
         """
