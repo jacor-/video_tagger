@@ -56,7 +56,8 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
     def forward(self, bottom, top):
         # assumes alpha = 1
-        if 'perro_gato_fantasma.npy' not in os.listdir('.'):
+        print(bottom[0].data.max(), bottom[0].data.min(), np.isnan(bottom[0].data).sum())
+        if np.isnan(bottom[0].data).sum() > 0:
             np.save('perro_gato_fantasma', bottom[0].data)
         self.e_xi = np.exp(bottom[0].data)
 
