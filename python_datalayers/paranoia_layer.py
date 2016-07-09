@@ -79,7 +79,7 @@ class SmoothMaxVideoLayer2(caffe.Layer):
 
 
 
-        gradback = output - np.dot(self.mask.T, output)
+        gradback = self.e_xi / np.dot(self.mask.T, output)
         self.diff[...] = gradback
 
     def backward(self, top, propagate_down, bottom):
