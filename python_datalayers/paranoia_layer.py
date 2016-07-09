@@ -227,7 +227,7 @@ class BatchAdvancer():
                     im = im[:, ::flip, :]
                 except:
                     print("Error loading image " + str(imagepath))
-                    im = np.zeros([3,im_shape[0], im_shape[1]])
+                    im = np.zeros([3,self.im_shape[0], self.im_shape[1]])
                 self.result['data'].append(self.transformer.preprocess(im))
 
 
