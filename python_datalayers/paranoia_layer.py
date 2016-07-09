@@ -60,10 +60,15 @@ class SmoothMaxVideoLayer2(caffe.Layer):
         #print('----')
         #print(bottom[0].data.max(), bottom[0].data.min(), np.isnan(bottom[0].data).sum())
 
-
         self.e_xi = np.exp(self.scale*bottom[0].data)
+        sum_per_video = np.dot(self.mask, self.e_xi)
+        output = np.log(sum_per_video)*self.scale
 
-        output = np.log(np.dot(self.mask, self.e_xi))*self.scale
+        if 'a.npy' not in os.listdir('.'):
+            np.save('a',bottom[0].data)
+            np.save('b',self.e_xi)
+            np.save('c',sum_per_video)
+            np.save('d',output)
 
         ### COMPUTE THE OUTPUT
 
