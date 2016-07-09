@@ -65,7 +65,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
     variables_to_replace = {
-        'ITERS' : '20', #'2000',
+        'ITERS' : '2000',
         'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_1' % CLASSIFIER_NAME,
         'MODELTOTRAIN': PROTOTXT_READY
     }
