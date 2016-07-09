@@ -56,6 +56,7 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
     def forward(self, bottom, top):
         # assumes alpha = 1
+        np.save('perro_gato_fantasma', bottom[0].data)
         self.e_xi = np.exp(bottom[0].data)
 
         numerator = np.dot(self.mask, (bottom[0].data * self.e_xi))
