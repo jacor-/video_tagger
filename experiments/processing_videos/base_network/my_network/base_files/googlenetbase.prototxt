@@ -1627,10 +1627,10 @@ layer {
   }
 }
 layer {
-  name: "sigmoid_pafuera_2"
+  name: "sigmoidpafuera2"
   type: "Sigmoid"
   bottom: "loss2/classifier_new"
-  top: "sigmoid_pafuera_2"
+  top: "sigmoidpafuera2"
 }
 
 
