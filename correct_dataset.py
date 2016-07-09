@@ -1,3 +1,8 @@
+import os
+from PIL import Image
+import pandas as pd
+
+
 base_dataset_filename = '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags.csv'
 out_dataset_filename = '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags_filtered_jose.csv'
 images_path = '/home/ubuntu/uploaded_images/images/'
@@ -11,7 +16,6 @@ for im in os.listdir(images_path):
         errors.append(im)
 print([len(errors), len(correct)])
 
-import pandas as pd
 data = pd.DataFrame(map(lambda x: x.split("_")[0], correct))
 data[1] = 1
 
