@@ -20,6 +20,76 @@ from tools import SimpleTransformer
 
 
 
+class SmoothMaxVideoLayer2(caffe.Layer):
+
+    def setup(self, bottom, top):
+        # We only have an input here: the result of processing each frame independently
+        if len(bottom) != 1:
+            raise Exception("We expect only one input.")
+
+        params = eval(self.param_str)
+        # do some simple checks that we have the parameters we need.
+        assert 'batch_size' in params.keys(), 'Params must include batch size.'
+        assert 'frames_per_video' in params.keys(), 'Params must include frames_per_video.'
+
+        self.batch_size = int(params['batch_size'])
+        self.frames_per_video = int(params['frames_per_video'])
+        self.videos_per_batch = self.batch_size / self.frames_per_video
+
+
+        #We will use e_xi as an auxiliar space. The mask will be used to perform vectorized operation on the output.
+        self.e_xi = np.zeros(bottom[0].data.shape)
+        self.mask = np.zeros((self.videos_per_batch, self.batch_size))
+        for ivid in range(self.videos_per_batch):
+            for iframe in range(self.frames_per_video):
+                self.mask[ivid][ivid*self.frames_per_video+iframe] = 1
+
+        top[0].reshape(self.videos_per_batch, bottom[0].data.shape[1])
+
+        self.diff = np.zeros_like(bottom[0].data, dtype=np.float32)
+
+
+    def reshape(self, bottom, top):
+        # We only reshape once because the input has constant shape
+        pass
+        # check input dimensions match
+
+    def forward(self, bottom, top):
+        # assumes alpha = 1
+        #print('----')
+        #print(bottom[0].data.max(), bottom[0].data.min(), np.isnan(bottom[0].data).sum())
+
+        self.e_xi = np.exp(bottom[0].data)
+
+        output = np.log(np.dot(self.mask, self.e_xi))
+
+        ### COMPUTE THE OUTPUT
+
+        ## We scale the output by a factor of 2 to be sure the sigmoid in the end has the possibility to reach extreme values
+        # Remember this is the maximum over a sigmoid, so the output will be (0,1). THis means that the next sigmoid will be
+        # in the range of (0.23, 0.77)
+        top[0].data[...] = output
+
+        #if 'perro_gato_fantasma_in1.npy' not in os.listdir('.'):
+        #    np.save('perro_gato_fantasma_in1', bottom[0].data)
+        #    np.save('perro_gato_fantasma_in2', output / 2)
+
+
+        print(output.max(), output.min(), np.isnan(output).sum())
+
+
+
+        gradback = output - np.dot(self.mask.T, output)
+        self.diff[...] = gradback
+
+    def backward(self, top, propagate_down, bottom):
+        if not propagate_down[0]:
+            return
+
+        bottom[0].diff[...] = self.diff * np.dot(self.mask.T, top[0].diff)
+
+
+
 class SmoothMaxVideoLayer(caffe.Layer):
 
     def setup(self, bottom, top):
