@@ -21,7 +21,7 @@ class PrototxtTemplate(object):
                 temp = PrototxtTemplate(map_template2file[template_name], {})
                 val = temp.getString(args)
                 replaceable.append(['<<'+self.template[ini:end]+'>>', val])
-                
+
         #We replace here
         for to_b_repl, replace_with in replaceable:
             self.template = self.template.replace(to_b_repl, replace_with)
@@ -51,6 +51,8 @@ class PrototxtTemplate(object):
     def getString(self, fields_to_replace):
         aux = str(self.template)
         for string_to_replace in fields_to_replace:
+            print(string_to_replace)
+            print(fields_to_replace[string_to_replace])
             aux = aux.replace('<<var#'+string_to_replace+'>>', fields_to_replace[string_to_replace])
         return aux
 
