@@ -3,7 +3,7 @@
 ## http://chrischoy.github.io/research/caffe-python-layer/
 import caffe
 import numpy as np
-
+import os
 
 
 import json, time, pickle, scipy.misc, skimage.io, caffe
@@ -56,7 +56,8 @@ class SmoothMaxVideoLayer(caffe.Layer):
 
     def forward(self, bottom, top):
         # assumes alpha = 1
-        np.save('perro_gato_fantasma', bottom[0].data)
+        if 'perro_gato_fantasma' not in os.listdir('.'):
+            np.save('perro_gato_fantasma', bottom[0].data)
         self.e_xi = np.exp(bottom[0].data)
 
         numerator = np.dot(self.mask, (bottom[0].data * self.e_xi))
