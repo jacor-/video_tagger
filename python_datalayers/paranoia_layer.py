@@ -222,13 +222,12 @@ class BatchAdvancer():
                 #im = np.asarray(Image.open(osp.join(self.data_filename, 'JPEGImages', index + '.jpg'))) # load image
                 try:
                     im = np.asarray(Image.open(imagepath)) # load image
-                    print(self.im_shape)
                     im = scipy.misc.imresize(im, self.im_shape) # resize
                     flip = np.random.choice(2)*2-1
                     im = im[:, ::flip, :]
                 except:
                     print("Error loading image " + str(imagepath))
-                    im = np.zeros([self.im_shape[0], self.im_shape[1]])
+                    im = np.zeros([self.im_shape[0], self.im_shape[1], 3])
                 self.result['data'].append(self.transformer.preprocess(im))
 
 

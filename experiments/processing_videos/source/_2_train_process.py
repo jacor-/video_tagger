@@ -56,7 +56,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
         'TRAINSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_train'],
         'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
         'IMAGEPATH': settings['images_path'],
-        'FRAMESPERVIDEO': str(settings['frames_per_video']), 
+        'FRAMESPERVIDEO': str(settings['frames_per_video']),
         'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dataset'],
         'BATCHSIZE': str(settings['batch_size'])
     }
@@ -97,7 +97,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
         'TRAINSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_train'],
         'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
         'IMAGEPATH': settings['images_path'],
-        'FRAMESPERVIDEO': settings['frames_per_video'], 
+        'FRAMESPERVIDEO': settings['frames_per_video'],
         'DATASETFILE': settings['path_for_files']+"/"+settings['dict_dataset'],
         'BATCHSIZE': settings['batch_size']
     }
@@ -116,7 +116,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
 
     os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_2.error > {b}/{a}_train_stage_2.log'.format(a = CLASSIFIER_NAME, SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, b = settings['LOGS_PATH']))
-    '''    
+    '''
 
 if __name__ == '__main__':
     #Path to the validation and train filenames
