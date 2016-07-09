@@ -6,7 +6,7 @@ layer {
   top: "smoothmax_<<var#name>>"
   python_param {
     module: "paranoia_layer"
-    layer: "SmoothMaxVideoLayer2"
+    layer: "SmoothMaxVideoLayer"
     param_str: '{"batch_size" : <<var#BATCHSIZE>>, "frames_per_video": <<var#FRAMESPERVIDEO>>}'
   }
 }
