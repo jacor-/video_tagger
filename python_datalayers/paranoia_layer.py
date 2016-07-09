@@ -228,7 +228,6 @@ class BatchAdvancer():
                 except:
                     print("Error with image " + imagepath)
                     im = np.zeros([self.im_shape[0], self.im_shape[1], 3])
-                print(im.shape)
                 self.result['data'].append(self.transformer.preprocess(im))
 
 
