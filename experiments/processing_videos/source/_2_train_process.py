@@ -14,6 +14,7 @@
 
 import template_tools
 from template_tools.template_manager1 import PrototxtTemplate
+from _stupid_tools_and_helpers_scripting import _aux_getNumberOfCasses, _aux_getSnapshotToBeused, _getPredefinedVariables_
 import subprocess
 import os
 import numpy as np
@@ -45,14 +46,14 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     #########################################################
     ###------------------ 1st stage ----------------------###
     #########################################################
-    '''
+    
     last_snapshot = INITIAL_WEIGHTS
 
     variables_to_replace = {
         'LRMULTBASENET' : '0',
         'DEMULTBASENET' : '0',
-        'LRMULTLASTLAYER' : '1',
-        'DEMULTLASTLAYER' : '2',
+        'LRMULTLASTLAYER' : '0.5',
+        'DEMULTLASTLAYER' : '1',
         'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
         'TRAINSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_train'],
         'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
@@ -66,7 +67,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
     variables_to_replace = {
-        'ITERS' : '2000',
+        'ITERS' : '100',
         'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_1' % CLASSIFIER_NAME,
         'MODELTOTRAIN': PROTOTXT_READY
     }
@@ -82,19 +83,18 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_1.error > {b}/{a}_train_stage_1.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, a = CLASSIFIER_NAME, b = settings['LOGS_PATH']))
 
 
-    '''
+    
     #########################################################
     ###------------------ 2st stage ----------------------###
     #########################################################
     snapshot_prefix_looked_for = '%s_snapshot_stage_1' % CLASSIFIER_NAME
-    #last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
-    last_snapshot = INITIAL_WEIGHTS
+    last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
 
     variables_to_replace = {
-        'LRMULTBASENET' : '1',
-        'DEMULTBASENET' : '0.5',
-        'LRMULTLASTLAYER' : '1',
-        'DEMULTLASTLAYER' : '0.5',
+        'LRMULTBASENET' : '0.2',
+        'DEMULTBASENET' : '0.2',
+        'LRMULTLASTLAYER' : '0.3',
+        'DEMULTLASTLAYER' : '0.2',
         'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
         'TRAINSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_train'],
         'TESTSAMPLESFILE': settings['path_for_files']+"/"+settings['output_file_test'],
@@ -109,7 +109,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
     new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
     variables_to_replace = {
-        'ITERS' : '20',#'5000',
+        'ITERS' : '2000',#'5000',
         'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_2' % CLASSIFIER_NAME,
         'MODELTOTRAIN': PROTOTXT_READY
     }
@@ -123,8 +123,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, map_template2file):
 if __name__ == '__main__':
     #Path to the validation and train filenames
     CLASSIFIER_NAME = settings['experiment_name']
-
-    OUTPUT_CLASSES= len(np.load("%s/%s" % (settings['path_for_files'], settings['processed_labels_2_original_label'])))
+    OUTPUT_CLASSES = _aux_getNumberOfCasses(settings['output_file_train'])
 
     print("Training network with name " + CLASSIFIER_NAME + " which has " + str(OUTPUT_CLASSES) + ' classes')
     trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, settings['map_template2file']['TRAIN'])

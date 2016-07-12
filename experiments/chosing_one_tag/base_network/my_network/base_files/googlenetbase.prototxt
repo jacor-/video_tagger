@@ -2307,11 +2307,11 @@ layer {
 }
 layer {
   type: "Softmax"
-  name: "probsout"
+  name: "probs"
   bottom: "loss3/classifier_new"
   top: "probsout"
   propagate_down: false
 }
 
 
-<<template#evaltrainstage#bottomlayer:loss3/classifier_new#outprobs:probsout>>
+<<template#evaltrainstage#bottomlayer:loss3/classifier_new#outprobs:probs>>

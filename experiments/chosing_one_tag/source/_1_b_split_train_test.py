@@ -58,7 +58,7 @@ def filter_datafiles(input_file, output_file, available_images):
     f = open(input_file)
     lines = f.readlines()
     f.close()
-
+    '''
     accepted_output = []
     for line in lines:
         name = line[:-1].split(",")[0].split("/")[-1]
@@ -67,7 +67,8 @@ def filter_datafiles(input_file, output_file, available_images):
             accepted_output.append(line)
         except:
             pass
-
+    '''
+    accepted_output = lines
     f = open(output_file, 'w')
     for line in accepted_output:
         f.write(line)

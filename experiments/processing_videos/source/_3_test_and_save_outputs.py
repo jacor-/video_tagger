@@ -19,7 +19,7 @@ def predictFromFile(net, input_data_file):
         imagenames = [dataset[i*batch_size+j][0] for j in range(batch_size)]
         labels += [map(int, list(set(dataset[i*batch_size+j][1].split(" ")))) for j in range(batch_size)]
         hashes += imagenames
-        predictions.append(np.copy(net.getOutputData(imagenames, ['probsout'])[0]))
+        predictions.append(np.copy(net.getOutputData(imagenames)))
 
     if len(dataset) % batch_size != 0:
         print(" - last batch")
@@ -27,7 +27,7 @@ def predictFromFile(net, input_data_file):
         imagenames = [dataset[first_index+j][0] for j in range(len(dataset) % batch_size)]
         labels += [map(int, list(set(dataset[first_index+j][1].split(" ")))) for j in range(len(dataset) % batch_size)]
         hashes += imagenames
-        predictions.append(np.copy(net.getOutputData(imagenames, ['probsout'])[0]))
+        predictions.append(np.copy(net.getOutputData(imagenames)))
 
     return np.vstack(predictions)[:len(labels)], labels, hashes
 
@@ -48,7 +48,8 @@ if __name__ == '__main__':
 
     ## These variables should be hardcoded
     CLASSIFIER_NAME = settings['experiment_name']
-    OUTPUT_CLASSES = _aux_getNumberOfCasses("experiments/chosing_one_tag/data/files/train.txt")
+    OUTPUT_CLASSES = _aux_getNumberOfCasses(settings['output_file_train'])
+
     model_file = _aux_getSnapshotToBeused(CLASSIFIER_NAME)
     print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
 
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'], settings['map_template2file']['TEST'])
 
     t1 = time.time()
-    predictions_val, labels_val, hashes_val = predictFromFile(net, "experiments/chosing_one_tag/data/files/val.txt")
+    predictions_val, labels_val, hashes_val = predictFromFile(net, settings['path_for_files']+"/"+settings['output_file_test'])
     print(time.time()-t1)
     print("Final accuracy: " + str(getAccuracy(predictions_val, labels_val)))
     np.save('experiments/chosing_one_tag/data/raw_results/val_results.npy', predictions_val)
@@ -67,7 +68,7 @@ if __name__ == '__main__':
     np.save('experiments/chosing_one_tag/data/raw_results/val_label.npy', labels_val)
 
     t1 = time.time()
-    predictions_train, labels_train, hashes_train = predictFromFile(net, "experiments/chosing_one_tag/data/files/train.txt")
+    predictions_train, labels_train, hashes_train = predictFromFile(net, settings['path_for_files']+"/"+settings['output_file_train'])
     print(time.time()-t1)
     print("Final accuracy: " + str(getAccuracy(predictions_train, labels_train)))
     np.save('experiments/chosing_one_tag/data/raw_results/train_results.npy', predictions_train)

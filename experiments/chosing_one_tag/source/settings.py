@@ -1,19 +1,18 @@
 
-experiment_path = 'experiments/chosing_one_tag'
-experiment_name = 'testing_refactoring'
+experiment_name = 'exploring_multiframe'
+
 settings = {
     'experiment_name' : experiment_name,
     'experiment_path' : experiment_path,
 
-    'dataset_filename': '%s/base_network/input_data/dataset_mid.csv' % experiment_path,
-    #'images_path': '/home/ubuntu/uploaded_images/images',
-    'images_path': '/home/ubuntu/victor_tests/vilynx_bitbucket/vilynx-dl2/data/images',
-    'minimum_samples_per_tag': 30,
+    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags_images_mult3.csv',
+    'images_path': '/home/ubuntu/datasets_vilynx/uploaded_images/images_mult3',
+    'minimum_samples_per_tag': 20,
 
     'output_file_train' : '%s/data/files/train.txt'  % experiment_path, ## DO NOT MODIFY THIS ONE
     'output_file_test' : '%s/data/files/val.txt'  % experiment_path, ## DO NOT MODIFY THIS ONE
-    'processed_labels_csv': '%s/data/files/prepared_dataset.csv'  % experiment_path, ## DO NOT MODIFY THIS ONE
-    'processed_labels_2_original_label' : '%s/data/files/classes.npy'  % experiment_path, ## DO NOT MODIFY THIS ONE
+    'processed_labels_csv': '%s/data/files/%s_prepared_dataset.csv'  % (experiment_path, experiment_name), ## DO NOT MODIFY THIS ONE
+    'processed_labels_2_original_label' : '%s/data/files/%s_classes.npy'  % (experiment_path, experiment_name), ## DO NOT MODIFY THIS ONE
 
     'map_template2file': {
     	'TEST': {

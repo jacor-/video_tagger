@@ -49,8 +49,8 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     variables_to_replace = {
         'LRMULTBASENET' : '0',
         'DEMULTBASENET' : '0',
-        'LRMULTLASTLAYER' : '1',
-        'DEMULTLASTLAYER' : '2',
+        'LRMULTLASTLAYER' : '0.5',
+        'DEMULTLASTLAYER' : '1',
         'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
         'TRAINFILENAME': TRAIN_FILENAME,
         'VALFILENAME': VAL_FILENAME
@@ -60,7 +60,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
     variables_to_replace = {
-        'ITERS' : '20', #'2000',
+        'ITERS' : '100', #'2000',
         'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_1' % CLASSIFIER_NAME,
         'MODELTOTRAIN': PROTOTXT_READY
     }
@@ -84,10 +84,10 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
 
     variables_to_replace = {
-        'LRMULTBASENET' : '1',
-        'DEMULTBASENET' : '0.5',
-        'LRMULTLASTLAYER' : '1',
-        'DEMULTLASTLAYER' : '0.5',
+        'LRMULTBASENET' : '0.2',
+        'DEMULTBASENET' : '0.2',
+        'LRMULTLASTLAYER' : '0.3',
+        'DEMULTLASTLAYER' : '0.2',
         'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
         'TRAINFILENAME': TRAIN_FILENAME,
         'VALFILENAME': VAL_FILENAME
@@ -98,7 +98,7 @@ def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN
     new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
 
     variables_to_replace = {
-        'ITERS' : '20',#'5000',
+        'ITERS' : '5000',#'5000',
         'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_2' % CLASSIFIER_NAME,
         'MODELTOTRAIN': PROTOTXT_READY
     }
@@ -113,8 +113,8 @@ if __name__ == '__main__':
     CLASSIFIER_NAME = settings['experiment_name']
 
     #Path to the validation and train filenames
-    VAL_FILENAME="experiments/chosing_one_tag/data/files/val.txt"
-    TRAIN_FILENAME="experiments/chosing_one_tag/data/files/train.txt"
+    VAL_FILENAME=settings['output_file_test']
+    TRAIN_FILENAME=settings['output_file_train']
 
     command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
     OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))

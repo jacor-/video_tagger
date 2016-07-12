@@ -1,7 +1,7 @@
 layer {
   type: "Python"
   name: "labelmodifier"
-  bottom: "<<var#bottomlayer>>"
+  bottom: "<<var#outprobs>>"
   bottom: "label"
   top: "labelmodifier"
   python_param {
