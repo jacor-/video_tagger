@@ -1,3 +1,4 @@
+
 ##
 ## This script modifies the googlenet prototxts and train the network.
 ## This script is already being moved to a 'pythonic' and more readable version.
@@ -14,111 +15,64 @@
 
 import template_tools
 from template_tools.template_manager1 import PrototxtTemplate
+from _stupid_tools_and_helpers_scripting import _aux_getNumberOfCasses, _aux_getSnapshotToBeused, _getPredefinedVariables_
 import subprocess
 import os
 import sys
 from settings import settings
 
+def trainStage(initial_weights, output_classes, last_layer_lr_mult, rest_layers_lr_mult, iters, name_for_stage):
+    last_snapshot = initial_weights
+    ## 0 - We remove the existing snapshots with this name, so we will not take the wrong one
+    removeExistingSnapshots(name_for_stage)
 
-def trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME, map_template2file):
-
-    #Paths where we can find the original files
-    PROTOTXT_BASE=settings['PROTOTXT_BASE']
-    SOLVER_BASE=settings['SOLVER_BASE']
-
-    #Path to the folder where we can wait the initial weights in case we want to use some
-    INITIAL_WEIGHTS=settings['INITIAL_WEIGHTS']
-
-    PROTOTXT_READY=settings['PROTOTXT_READY']
-    SOLVER_READY=settings['SOLVER_READY']
-
-    #Path where we will save the snapshots which are going to be produced when training the network
-    SNAPSHOT_PREFIX=settings['SNAPSHOT_PREFIX']
-
-
-
-    # We check how many classes there are in the output. Please, be sure when you build the dataset that the classes are numbered from 0 to (OUTPUT_CLASSES - 1)
-
-    os.system('mkdir -p ' + settings['PROTOTXT_READY_PATH'])
-
-    #########################################################
-    ###------------------ 1st stage ----------------------###
-    #########################################################
-    last_snapshot = INITIAL_WEIGHTS
-
+    ## 1 - Let's create prototxt network based on our templates
     variables_to_replace = {
-        'LRMULTBASENET' : '0',
-        'DEMULTBASENET' : '0',
-        'LRMULTLASTLAYER' : '0.5',
-        'DEMULTLASTLAYER' : '1',
-        'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
-        'TRAINFILENAME': TRAIN_FILENAME,
-        'VALFILENAME': VAL_FILENAME
+        'LRMULTBASENET' : str(1*rest_layers_lr_mult),
+        'DEMULTBASENET' : str(0.5*rest_layers_lr_mult),
+        'LRMULTLASTLAYER' : str(1*last_layer_lr_mult),
+        'DEMULTLASTLAYER' : str(0.5*last_layer_lr_mult),
+        'OUTPUTNEURONS' : str(output_classes),
+        'TRAINFILENAME': settings['output_file_train'],
+        'VALFILENAME': settings['output_file_test']
     }
+    new_prototxt = PrototxtTemplate(settings['PROTOTXT_BASE'], settings['map_template2file']['TRAIN'])
+    new_prototxt.saveOutputPrototxt(settings['PROTOTXT_READY'], variables_to_replace)
 
-    new_prototxt = PrototxtTemplate(PROTOTXT_BASE, map_template2file)
-    new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
-
+    ## 2 - Now we create the solver
     variables_to_replace = {
-        'ITERS' : '100', #'2000',
-        'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_1' % CLASSIFIER_NAME,
-        'MODELTOTRAIN': PROTOTXT_READY
+        'ITERS' : str(iters), #'2000',
+        'SNAPSHOTPREFIX' : settings['SNAPSHOT_PREFIX'] + '/%s_%s' % (settings['experiment_name'], name_for_stage),
+        'MODELTOTRAIN': settings['PROTOTXT_READY']
     }
+    new_solver_prototxt = PrototxtTemplate(settings['SOLVER_BASE'], {})
+    new_solver_prototxt.saveOutputPrototxt(settings['SOLVER_READY'], variables_to_replace)
 
+    # 3 - Now we execute the network
+    os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_{c}.error > {b}/{a}_{c}.log'.format(SOLVER_READY = settings['SOLVER_READY'], INITIAL_WEIGHTS = last_snapshot, c = name_for_stage, a = settings['experiment_name'], b = settings['LOGS_PATH']))
 
-    new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
-    print("saving prototxt solver in")
-    print(SOLVER_READY)
-    new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
+def removeExistingSnapshots(name_stage):
+    snapshot_prefix_looked_for = '%s_%s' % (settings['experiment_name'], name_stage)
+    available_snapshots = [x for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]
+    for snapshot_file in available_snapshots:
+        os.remove(settings['SNAPSHOT_PREFIX'] + "/" + snapshot_file)
+    available_solverstate = [x for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'solverstate' in x and snapshot_prefix_looked_for in x]
+    for solverstate_file in available_solverstate:
+        os.remove(settings['SNAPSHOT_PREFIX'] + "/" + solverstate_file)
 
-
-    print(INITIAL_WEIGHTS)
-    os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_1.error > {b}/{a}_train_stage_1.log'.format(SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, a = CLASSIFIER_NAME, b = settings['LOGS_PATH']))
-
-
-    
-    #########################################################
-    ###------------------ 2st stage ----------------------###
-    #########################################################
-    snapshot_prefix_looked_for = '%s_snapshot_stage_1' % CLASSIFIER_NAME
-    last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]], key = lambda x: x[0], reverse = True)[0][1]
-
-    variables_to_replace = {
-        'LRMULTBASENET' : '0.2',
-        'DEMULTBASENET' : '0.2',
-        'LRMULTLASTLAYER' : '0.3',
-        'DEMULTLASTLAYER' : '0.2',
-        'OUTPUTNEURONS' : str(OUTPUT_CLASSES),
-        'TRAINFILENAME': TRAIN_FILENAME,
-        'VALFILENAME': VAL_FILENAME
-    }
-
-
-    new_prototxt = PrototxtTemplate(PROTOTXT_BASE, map_template2file)
-    new_prototxt.saveOutputPrototxt(PROTOTXT_READY, variables_to_replace)
-
-    variables_to_replace = {
-        'ITERS' : '5000',#'5000',
-        'SNAPSHOTPREFIX' : SNAPSHOT_PREFIX + '/%s_snapshot_stage_2' % CLASSIFIER_NAME,
-        'MODELTOTRAIN': PROTOTXT_READY
-    }
-
-    new_solver_prototxt = PrototxtTemplate(SOLVER_BASE, {})
-    new_solver_prototxt.saveOutputPrototxt(SOLVER_READY, variables_to_replace)
-
-    os.system('/home/ubuntu/caffenew/build/tools/caffe train -solver {SOLVER_READY} -weights {INITIAL_WEIGHTS} 2> {b}/{a}_train_stage_2.error > {b}/{a}_train_stage_2.log'.format(a = CLASSIFIER_NAME, SOLVER_READY = SOLVER_READY, INITIAL_WEIGHTS = last_snapshot, b = settings['LOGS_PATH']))
-    
+def getLastAvailableSnapshot(name_previous_stage):
+    snapshot_prefix_looked_for = '%s_%s' % (settings['experiment_name'], name_previous_stage)
+    list_candidates = [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]
+    last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in list_candidates], key = lambda x: x[0], reverse = True)[0][1]
+    return last_snapshot
 
 if __name__ == '__main__':
-    CLASSIFIER_NAME = settings['experiment_name']
+    output_classes = _aux_getNumberOfCasses(settings['output_file_train'])
+    initial_weights = settings['INITIAL_WEIGHTS']
+    print("Training network with name " + settings['experiment_name'] + " which has " + str(output_classes) + ' classes')
 
-    #Path to the validation and train filenames
-    VAL_FILENAME=settings['output_file_test']
-    TRAIN_FILENAME=settings['output_file_train']
+    print("- Stage 1 with original weights: " + initial_weights)
+    trainStage(initial_weights                      , output_classes, 1., 0., 250, '1st_stage')
+    print("- Stage 2 starting with the resulting weights from 1st stage: " + getLastAvailableSnapshot('1st_stage'))
+    trainStage(getLastAvailableSnapshot('1st_stage'), output_classes, 0.5, 0.5, 5000, '2nd_stage')
 
-    command = "cat {train_filename}  | cut -d ',' -f2 | tr ' ' '\n' | sort | uniq | wc -l".format(train_filename = TRAIN_FILENAME)
-    OUTPUT_CLASSES= int(subprocess.check_output(command, shell = True))
-
-    print("Training network with name " + CLASSIFIER_NAME + " which has " + str(OUTPUT_CLASSES) + ' classes')
-    
-    trainNetworkFromScratch(CLASSIFIER_NAME, OUTPUT_CLASSES, VAL_FILENAME, TRAIN_FILENAME, settings['map_template2file']['TRAIN'])
