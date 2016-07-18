@@ -72,7 +72,7 @@ if __name__ == '__main__':
     print("Training network with name " + settings['experiment_name'] + " which has " + str(output_classes) + ' classes')
 
     print("- Stage 1 with original weights: " + initial_weights)
-    trainStage(initial_weights                      , output_classes, 1., 0., 250, '1st_stage')
+    #trainStage(initial_weights                      , output_classes, 1., 0., 250, '1st_stage')
     print("- Stage 2 starting with the resulting weights from 1st stage: " + getLastAvailableSnapshot('1st_stage'))
-    trainStage(getLastAvailableSnapshot('1st_stage'), output_classes, 0.5, 0.5, 5000, '2nd_stage')
+    #trainStage(getLastAvailableSnapshot('1st_stage'), output_classes, 0.5, 0.5, 2500, '2nd_stage')
 

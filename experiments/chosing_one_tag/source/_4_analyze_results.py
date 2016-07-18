@@ -49,7 +49,6 @@ def getResults():
 	        else:
 	            corpus_val[hash_]['X'].append(val_result)
 
-
     return [corpus_train, corpus_val]
 
 
@@ -74,15 +73,16 @@ def getDatasets_aggrsum(corpus_train, corpus_val):
     return X_train, X_test, out_space_train, out_space_val
 
 def getDatasets_baseline(corpus_train, corpus_val):
+    ## We compute the baseline by simply getting the maximum for each one of the outputs. So no classifier is used here!
     X_train = [np.argmax(corpus_train[key]['X'], axis=1) for key in corpus_train.keys()]
     X_test  = [np.argmax(corpus_val[key]['X']  , axis=1) for key in corpus_val.keys()  ]
-
 
     y_train = [corpus_train[key]['label'] for key in corpus_train.keys()]
     y_val   = [corpus_val[key]['label'] for key in corpus_val.keys()]
 
     N_classes = np.max([np.max(np.max(y_val))+1,np.max(np.max(y_train))+1])
 
+    # We fill the validation space by using the known outputs
     out_space_val = np.zeros([len(y_val), N_classes])
     for i in range(len(y_val)):
         out_space_val[i][np.array(y_val[i])] = 1
@@ -90,7 +90,7 @@ def getDatasets_baseline(corpus_train, corpus_val):
     for i in range(len(y_train)):
         out_space_train[i][np.array(y_train[i])] = 1
 
-
+    # We fill the the predicted space by taking the maximum in Train and Test
     out_space_X_val = np.zeros([len(y_val), N_classes])
     for i in range(len(X_test)):
         out_space_X_val[i][np.array(X_test[i])] = 1
@@ -98,39 +98,75 @@ def getDatasets_baseline(corpus_train, corpus_val):
     for i in range(len(X_train)):
         out_space_X_train[i][np.array(X_train[i])] = 1
 
-
     return out_space_X_train, out_space_X_val, out_space_train, out_space_val
 
 
-def PerformMetaClassification(X_train, X_test, y_train, y_test):
-    clf = RandomForestClassifier(n_jobs = -1, n_estimators = 100)
-    clf.fit(X_train, y_train)
-    preds_test = clf.predict(X_test)
-    preds_train = clf.predict(X_train)
+def performMetaClassification(X_train, X_test, y_train, y_test, type_="OutputCodeClassifier"):
+    print(type_)
+    if type_ == "RandomForestClassifier":
+        model = RandomForestClassifier(n_jobs = -1, n_estimators = 500)
+
+    elif type_ == "KNeighborsClassifier":
+        model = KNeighborsClassifier(10)
+
+    elif type_ == "OutputCodeClassifier":
+        model = OutputCodeClassifier(LinearSVC(random_state=0))
+
+    elif type_ == "OneVsRestClassifier":
+        model = OneVsRestClassifier(LinearSVC(random_state=0))
+
+    model.fit(X_train, y_train)
+
+    preds_train = model.predict(X_train)
+    preds_test = model.predict(X_test)
     return preds_test, preds_train
 
-def printResults(preds_test, y_test, preds_train, y_train):
-    strict_accuracy = lambda pred, ref: float(((pred - ref).sum(axis=1) == 0).sum()) / ref.shape[0]
-    print("Strict accuracy (All the labels are correct in Test")
-    print(strict_accuracy(preds_test, y_test))
-    print("Strict accuracy (All the labels are correct in Train")
-    print(strict_accuracy(preds_train, y_train))
 
-    at_least_one_no_miss = lambda pred, ref: (((pred * ref).sum(axis=1) > 0) & ((ref - pred == -1).sum(axis=1) ==0)).mean()
-    print("At least one and no fail Test")
-    print(at_least_one_no_miss(preds_test, y_test))
-    print("At least one and no fail Train")
-    print(at_least_one_no_miss(preds_train, y_train))
+
+    for metric_type in metric_functions:
+        print(" - Results for %s" % metric_type)
+        print("    %0.3f" % metric_functions[metric_type](preds, ref))
+        df_results.loc[df_results.shape[0]+1] = ['Baseline','Test',]
+
+metric_functions = {
+   'strict_accuracy' : lambda pred, ref: float(((pred - ref).sum(axis=1) == 0).sum()) / ref.shape[0],
+   'at_least_one_no_miss' : lambda pred, ref: (((pred * ref).sum(axis=1) > 0) & ((ref - pred == -1).sum(axis=1) ==0)).mean()
+}
 
 
 if __name__ == "__main__":
     [corpus_train, corpus_val] = getResults()
+
+    df_results = pd.Dataframe(columns = ['name','split','metric','value'])
+
+    # We collect results based on meta classifiers
     [X_train, X_test, y_train, y_test] = getDatasets_aggrsum(corpus_train, corpus_val)
+    for classifier_name in ['RandomForestClassifier']:
+        preds_test, preds_train = PerformMetaClassification(X_train, X_test, y_train, y_test)
+        for metric_name in metric_functions:
+            df_results.loc[df_results.shape[0]+1] = [classifier_name,'Test',metric_name,metric_functions(preds_test, y_test)]
+        for metric_name in metric_functions:
+            df_results.loc[df_results.shape[0]+1] = [classifier_name,'Train',metric_name,metric_functions(preds_train, y_train)]
 
-    print("RandomForestOnTop")
-    preds_test, preds_train = PerformMetaClassification(X_train, X_test, y_train, y_test)
-    printResults(preds_test, y_test, preds_train, y_train)
 
-    print("Baseline result")
+    # We collect baseline reuslts
     [X_train, X_test, y_train, y_test] = getDatasets_baseline(corpus_train, corpus_val)
-    printResults(X_test, y_test, X_train, y_train)
+    for metric_name in metric_functions:
+        df_results.loc[df_results.shape[0]+1] = ['Baseline','Test',metric_name,metric_functions(X_test, y_test)]
+    for metric_name in metric_functions:
+        df_results.loc[df_results.shape[0]+1] = ['Baseline','Train',metric_name,metric_functions(X_train, y_train)]
+
+
+    # Lets see our results!
+    print(df_results)
+
+
+
+
+
+
+
+
+
+
+

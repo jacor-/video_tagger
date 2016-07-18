@@ -41,6 +41,12 @@ def getAccuracy(predictions, labels):
     return accs / predictions.shape[0]
 
 
+def getLastAvailableSnapshot(stage_name = '2nd_stage'):
+    snapshot_prefix_looked_for = '%s_%s' % (settings['experiment_name'], stage_name)
+    list_candidates = [(x.split("_")[-1],x) for x in os.listdir(settings['SNAPSHOT_PREFIX']) if 'caffemodel' in x and snapshot_prefix_looked_for in x]
+    last_snapshot=settings['SNAPSHOT_PREFIX'] + "/" + sorted([(int(x.split(".")[0]), name) for x,name in list_candidates], key = lambda x: x[0], reverse = True)[0][1]
+    return last_snapshot
+
 if __name__ == '__main__':
     os.system('mkdir -p data/raw_results')
 
@@ -49,7 +55,10 @@ if __name__ == '__main__':
     ## These variables should be hardcoded
     CLASSIFIER_NAME = settings['experiment_name']
     OUTPUT_CLASSES = _aux_getNumberOfCasses(settings['output_file_train'])
-    model_file = _aux_getSnapshotToBeused(CLASSIFIER_NAME)
+
+    #model_file = getLastAvailableSnapshot()
+    model_file = 'experiments/chosing_one_tag/data/snapshots/exploring_multiframe_2nd_stage_iter_3750.caffemodel'
+
     print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
 
 
@@ -57,6 +66,7 @@ if __name__ == '__main__':
     ## This loads output classes. It can be hardcoded
     vrs = _getPredefinedVariables_(CLASSIFIER_NAME)
     net = TestNetwork(OUTPUT_CLASSES, vrs['prototxt_base'], vrs['prototxt_ready'], model_file, vrs['batch_size'], vrs['imshape'], settings['map_template2file']['TEST'])
+
 
     t1 = time.time()
     predictions_val, labels_val, hashes_val = predictFromFile(net, "experiments/chosing_one_tag/data/files/val.txt")

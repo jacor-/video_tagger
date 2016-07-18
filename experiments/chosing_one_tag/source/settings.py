@@ -5,9 +5,9 @@ settings = {
     'experiment_name' : experiment_name,
     'experiment_path' : experiment_path,
 
-    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags_images_mult4.csv',
-    'images_path': '/home/ubuntu/datasets_vilynx/uploaded_images/images_mult4',
-    'minimum_samples_per_tag': 20,
+    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags_images_mult7.csv',
+    'images_path': '/home/ubuntu/datasets_vilynx/uploaded_images/images_mult7',
+    'minimum_samples_per_tag': 40,
 
     'output_file_train' : '%s/data/files/train.txt'  % experiment_path, ## DO NOT MODIFY THIS ONE
     'output_file_test' : '%s/data/files/val.txt'  % experiment_path, ## DO NOT MODIFY THIS ONE
