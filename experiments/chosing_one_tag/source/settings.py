@@ -1,12 +1,12 @@
 experiment_path = 'experiments/chosing_one_tag'
-experiment_name = 'exploring_multiframe'
+experiment_name = 'exploring_multiframe_v8'
 
 settings = {
     'experiment_name' : experiment_name,
     'experiment_path' : experiment_path,
 
-    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags_images_mult7.csv',
-    'images_path': '/home/ubuntu/datasets_vilynx/uploaded_images/images_mult7',
+    'dataset_filename': '/home/ubuntu/datasets_vilynx/labels/multi_frame_new_tags_images_mult8.csv',
+    'images_path': '/home/ubuntu/datasets_vilynx/uploaded_images/images_mult8',
     'minimum_samples_per_tag': 40,
 
     'output_file_train' : '%s/data/files/train.txt'  % experiment_path, ## DO NOT MODIFY THIS ONE

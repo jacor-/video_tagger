@@ -56,8 +56,7 @@ if __name__ == '__main__':
     CLASSIFIER_NAME = settings['experiment_name']
     OUTPUT_CLASSES = _aux_getNumberOfCasses(settings['output_file_train'])
 
-    #model_file = getLastAvailableSnapshot()
-    model_file = 'experiments/chosing_one_tag/data/snapshots/exploring_multiframe_2nd_stage_iter_3750.caffemodel'
+    model_file = getLastAvailableSnapshot()
 
     print("Testing " + CLASSIFIER_NAME + " with " + str(OUTPUT_CLASSES) + " classes. Snapshot " + model_file)
 
