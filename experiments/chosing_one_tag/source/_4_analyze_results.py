@@ -1,8 +1,9 @@
-
+from time import time
 import numpy as np
 import time
 from sklearn.ensemble import RandomForestClassifier
 from settings import settings
+import pandas as pd
 '''
 INSTRUCTIONS
 
@@ -53,8 +54,8 @@ def getResults():
 
 
 def getDatasets_aggrsum(corpus_train, corpus_val):
-    X_train = [np.sum(corpus_train[key]['X'], axis=0) for key in corpus_train.keys()]
-    X_test  = [np.sum(corpus_val[key]['X'], axis=0) for key in corpus_val.keys()]
+    X_train = np.array([np.sum(corpus_train[key]['X'], axis=0) for key in corpus_train.keys()])
+    X_test  = np.array([np.sum(corpus_val[key]['X'], axis=0) for key in corpus_val.keys()])
 
 
     y_train = [corpus_train[key]['label'] for key in corpus_train.keys()]
@@ -104,7 +105,7 @@ def getDatasets_baseline(corpus_train, corpus_val):
 def performMetaClassification(X_train, X_test, y_train, y_test, type_="OutputCodeClassifier"):
     print(type_)
     if type_ == "RandomForestClassifier":
-        model = RandomForestClassifier(n_jobs = -1, n_estimators = 500)
+        model = RandomForestClassifier(n_jobs = -1, n_estimators = 250)
 
     elif type_ == "KNeighborsClassifier":
         model = KNeighborsClassifier(10)
@@ -116,48 +117,48 @@ def performMetaClassification(X_train, X_test, y_train, y_test, type_="OutputCod
         model = OneVsRestClassifier(LinearSVC(random_state=0))
 
     model.fit(X_train, y_train)
-
-    preds_train = model.predict(X_train)
     preds_test = model.predict(X_test)
-    return preds_test, preds_train
+    return preds_test
 
-
-
-    for metric_type in metric_functions:
-        print(" - Results for %s" % metric_type)
-        print("    %0.3f" % metric_functions[metric_type](preds, ref))
-        df_results.loc[df_results.shape[0]+1] = ['Baseline','Test',]
 
 metric_functions = {
    'strict_accuracy' : lambda pred, ref: float(((pred - ref).sum(axis=1) == 0).sum()) / ref.shape[0],
-   'at_least_one_no_miss' : lambda pred, ref: (((pred * ref).sum(axis=1) > 0) & ((ref - pred == -1).sum(axis=1) ==0)).mean()
+   'at_least_one_no_mistake' : lambda pred, ref: (((pred * ref).sum(axis=1) > 0) & ((ref - pred == -1).sum(axis=1) ==0)).mean()
 }
 
 
 if __name__ == "__main__":
     [corpus_train, corpus_val] = getResults()
 
-    df_results = pd.Dataframe(columns = ['name','split','metric','value'])
+    df_results = pd.DataFrame(columns = ['name','split','metric','value'])
+
 
     # We collect results based on meta classifiers
     [X_train, X_test, y_train, y_test] = getDatasets_aggrsum(corpus_train, corpus_val)
+    print(X_train.shape)
+    X_train, X_test, y_train, y_test = X_train, X_test, y_train, y_test
     for classifier_name in ['RandomForestClassifier']:
-        preds_test, preds_train = PerformMetaClassification(X_train, X_test, y_train, y_test)
+        t1 = time.time()
+        preds_test = performMetaClassification(X_train, X_test, y_train, y_test, classifier_name)
+        print(time.time()-t1)
         for metric_name in metric_functions:
-            df_results.loc[df_results.shape[0]+1] = [classifier_name,'Test',metric_name,metric_functions(preds_test, y_test)]
-        for metric_name in metric_functions:
-            df_results.loc[df_results.shape[0]+1] = [classifier_name,'Train',metric_name,metric_functions(preds_train, y_train)]
+            df_results.loc[df_results.shape[0]+1] = [classifier_name,'Test',metric_name,metric_functions[metric_name](preds_test, y_test)]
+        #for metric_name in metric_functions:
+        #    df_results.loc[df_results.shape[0]+1] = [classifier_name,'Train',metric_name,metric_functions[metric_name](preds_train, y_train)]
 
 
     # We collect baseline reuslts
     [X_train, X_test, y_train, y_test] = getDatasets_baseline(corpus_train, corpus_val)
     for metric_name in metric_functions:
-        df_results.loc[df_results.shape[0]+1] = ['Baseline','Test',metric_name,metric_functions(X_test, y_test)]
-    for metric_name in metric_functions:
-        df_results.loc[df_results.shape[0]+1] = ['Baseline','Train',metric_name,metric_functions(X_train, y_train)]
+        df_results.loc[df_results.shape[0]+1] = ['Baseline','Test',metric_name,metric_functions[metric_name](X_test, y_test)]
+    #for metric_name in metric_functions:
+    #    df_results.loc[df_results.shape[0]+1] = ['Baseline','Train',metric_name,metric_functions[metric_name](X_train, y_train)]
 
 
     # Lets see our results!
+    df_results.to_csv('%s/data/files/%s_metrics.csv'  % (settings['experiment_path'], settings['experiment_name']))
+
+
     print(df_results)
 
 
